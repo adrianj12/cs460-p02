@@ -1,11 +1,12 @@
 package logic;
-public abstract class Vehicle {
+public abstract class Vehicle implements Runnable {
     private Direction currentDir;
     private int speed = 0;
     private float transparency = 0;
     private boolean intersectionFlag = false;
     private int minBufferDistance = 10;
     private int X_loc, Y_loc;
+    private Thread thread;
 
     public Direction getDirection(){
         return currentDir;
@@ -55,4 +56,6 @@ public abstract class Vehicle {
     public void setY_loc(int Y_loc){
         this.Y_loc = Y_loc;
     }
+
+    public abstract void move();
 }

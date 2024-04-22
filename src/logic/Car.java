@@ -8,4 +8,14 @@ public class Car extends Vehicle {
     public void flipEMS_inbound(){
         this.EMS_inbound = !this.EMS_inbound;
     }
+
+    @Override
+    public void run() {
+
+    }
+
+    @Override
+    public void move() {
+
+    }
 }
