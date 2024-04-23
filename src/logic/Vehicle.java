@@ -6,7 +6,7 @@ public abstract class Vehicle implements Runnable {
     private boolean intersectionFlag = false;
     private int minBufferDistance = 10;
     private int X_loc, Y_loc;
-    private Thread thread;
+    private boolean running = false;
 
     public Direction getDirection(){
         return currentDir;
@@ -40,7 +40,6 @@ public abstract class Vehicle implements Runnable {
         this.intersectionFlag = !this.intersectionFlag;
     }
 
-
     public int getX_loc(){
         return this.X_loc;
     }
@@ -58,4 +57,10 @@ public abstract class Vehicle implements Runnable {
     }
 
     public abstract void move();
+
+    @Override
+    public abstract void run();
+
+    public abstract void stop();
+
 }

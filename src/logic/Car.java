@@ -2,20 +2,31 @@ package logic;
 
 public class Car extends Vehicle {
 
-    boolean EMS_inbound;
+    private boolean EMS_inbound;
+    private boolean running;
 
 
     public void flipEMS_inbound(){
         this.EMS_inbound = !this.EMS_inbound;
     }
 
+
+    public void move() {
+    }
+
     @Override
     public void run() {
+        while (running) {
 
+            // do stuff
+            break;
+
+        }
     }
 
-    @Override
-    public void move() {
-
+    public void stop() {
+        this.running = false;
+        Thread.currentThread().interrupt();
     }
+
 }

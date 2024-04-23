@@ -1,14 +1,22 @@
 package logic;
 public class EMS extends Vehicle {
 
+private boolean running;
 
-    @Override
-    public void run() {
-
+    public void move() {
     }
 
     @Override
-    public void move() {
+    public void run() {
+        while (running) {
 
+            // do stuff
+            break;
+        }
+    }
+
+    public void stop() {
+        this.running = false;
+        Thread.currentThread().interrupt();
     }
 }
