@@ -6,10 +6,13 @@ public class SystemManager implements Runnable{
 
     private static int numIntersection = 12;
     protected static int sleepDelay = 10;
-    private static int numCarCreate = 0;
+    private static int currentCars = 0;
     private static int maxNumCars = 100;
-
     protected static int createCarProbability = 20;
+
+    private static float startingPOSX[] = new float[12];
+    private static float startingPOSY[] = new float[12];
+
 
     //protected List<Car> Cars = new ArrayList<Car>();
     //protected List<Thread> Cars = new ArrayList<Thread>();
@@ -19,7 +22,9 @@ public class SystemManager implements Runnable{
 
 
 
-    private void createVehicle(){}
+    private void createVehicle(){
+        currentCars++;
+    }
     private void createIntersection(){}
 
     private void createDMS(){}
@@ -31,6 +36,9 @@ public class SystemManager implements Runnable{
 
         while(true){
             probability = (int)(Math.random()*100);
+            if(NumOfCarsToCreate+currentCars > maxNumCars) {
+                break;
+            }
             if(probability <= createCarProbability){
                 NumOfCarsToCreate++;
             }
@@ -41,9 +49,13 @@ public class SystemManager implements Runnable{
         return NumOfCarsToCreate;
     }
 
+    private void removeVehicle(){
+        currentCars--;
+    }
 
     @Override
     public void run() {
+        int numCarCreate = 0;
         createIntersection();
         createDMS();
 
