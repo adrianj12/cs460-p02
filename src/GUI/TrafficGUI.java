@@ -1,16 +1,20 @@
 package GUI;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -22,7 +26,7 @@ public class TrafficGUI {
 
     // Advanced LED Board-7
     private final Font ledFont = Font.loadFont(getClass().getResourceAsStream(
-            "../fonts/advanced-led-board-7.regular.ttf"), 10);
+            "../fonts/advanced-led-board-7.regular.ttf"), screenSize.getHeight() / 1.33 / 32.5);
 
     private final Stage popUp = new Stage();
     private final int rows;
@@ -100,9 +104,9 @@ public class TrafficGUI {
                     }
                     if(finalI % 2 == 0 && !finalInter) {
                         BorderPane popUpBorder = new BorderPane();
-                        popUpBorder.setBackground(new Background(new BackgroundFill(green, null, null)));
+                        popUpBorder.setBackground(new Background(new BackgroundFill(green, null , null)));
 
-                        StackPane popUpStack = getPopUpStack();
+                        StackPane popUpStack = getPopUp();
 
                         popUpBorder.setCenter(popUpStack);
                         popUp.setScene(new Scene(popUpBorder));
@@ -139,10 +143,57 @@ public class TrafficGUI {
      *
      * @return StackPane of zoom in
      */
-    private StackPane getPopUpStack() {
-        ImageView popUpImage = setImageView("intersection lights (three-quarter).png", screenSize.getHeight() / 1.25);
-        ImageView popUpGrass = setImageView("grass.png", screenSize.getHeight() / 1.25);
-        return new StackPane(popUpGrass, popUpImage);
+    private StackPane getPopUp() {
+        HBox horizontalPopUp = new HBox();
+        horizontalPopUp.setSpacing(-1);
+        double size = screenSize.getHeight() / 1.33;
+        for (int i = 0; i < 3; i++) {
+            StackPane stackRoad = new StackPane();
+            if(i % 2 != 0) {
+                stackRoad.getChildren().add(setImageView("grass.png", size));
+                stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
+            }
+            else {
+                stackRoad.getChildren().add(setImageView("grass zoom.png", size));
+                stackRoad.getChildren().add(setImageView("east-west zoom (three-quarter).png", size));
+            }
+            horizontalPopUp.getChildren().add(stackRoad);
+        }
+
+        StackPane DMS = makeDMS(size);
+        DMS.setTranslateX(size * -0.5323);
+
+        StackPane DMS2 = makeDMS(size);
+        DMS2.setTranslateX(size * 0.5323);
+
+        StackPane DMS3 = makeDMS(size);
+        DMS3.setTranslateY(size * -0.4010);
+
+        StackPane DMS4 = makeDMS(size);
+        DMS4.setTranslateY(size * 0.4010);
+
+        return new StackPane(horizontalPopUp, DMS, DMS2, DMS3, DMS4);
+    }
+
+    /**
+     * Creates the DMS sign with message
+     * TODO might make a DMS GUI class
+     *
+     * @param size Height of window
+     * @return StackPane of DMS
+     */
+    private StackPane makeDMS(double size) {
+        StackPane sign = new StackPane();
+        Label signText = new Label("EMERGENCY VEHICLE\nAPPROACHING\nUSE CAUTION!");
+        signText.setFont(ledFont);
+        signText.setAlignment(Pos.TOP_LEFT);
+        signText.setBackground(Background.fill(Color.BLACK));
+        signText.setPadding(new Insets(0, 5, 0, 5));
+        signText.setTextFill(Color.web("0xFFFF73", 1.0));
+        signText.setPrefWidth(size * 0.375);
+        signText.setPrefHeight(size * 0.125);
+        sign.getChildren().add(signText);
+        return sign;
     }
 
     /**
@@ -155,7 +206,12 @@ public class TrafficGUI {
     private ImageView setImageView(String file, double size) {
         ImageView imageView = new ImageView(file);
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(size);
+        if(imageView.getFitHeight() >= imageView.getFitWidth()) {
+            imageView.setFitHeight(size);
+        }
+        else {
+            imageView.setFitWidth(size);
+        }
         return imageView;
     }
 }
