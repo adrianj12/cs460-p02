@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class SystemManager implements Runnable{
 
@@ -8,7 +9,8 @@ public class SystemManager implements Runnable{
     protected static int sleepDelay = 10;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
-    protected static int createCarProbability = 20;
+    protected static int createVehicleProbability = 20;
+    protected static int createEMSProbability = 5;
 
     private static float startingPOSX[] = new float[12];
     private static float startingPOSY[] = new float[12];
@@ -23,6 +25,8 @@ public class SystemManager implements Runnable{
 
 
     private void createVehicle(){
+        //RNG EMS vehicle creation.
+        //add to list
         currentCars++;
     }
     private void createIntersection(){}
@@ -36,12 +40,13 @@ public class SystemManager implements Runnable{
 
         while(true){
             probability = (int)(Math.random()*100);
-            if(NumOfCarsToCreate+currentCars > maxNumCars) {
+            if(NumOfCarsToCreate + currentCars >= maxNumCars) {
                 break;
             }
-            if(probability <= createCarProbability){
+            if(probability < createVehicleProbability){
                 NumOfCarsToCreate++;
             }
+
             else {
                 break;
             }
@@ -49,8 +54,8 @@ public class SystemManager implements Runnable{
         return NumOfCarsToCreate;
     }
 
-    private void removeVehicle(){
-        currentCars--;
+    private void removeVehicles(){
+        //currentCars--;
     }
 
     @Override
@@ -65,8 +70,10 @@ public class SystemManager implements Runnable{
                 numCarCreate = RNGCarRoll();
                 for(int i = 0; i < numCarCreate; i++){
                     createVehicle();
+                    TimeUnit.SECONDS.sleep(2);
                 }
                 Thread.sleep(sleepDelay);
+                removeVehicles();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
