@@ -13,8 +13,8 @@ public class Main extends Application {
 
         BorderPane borderPane = new BorderPane();
         Scene scene = new Scene(borderPane);
-        // Rows and cols might not be great on other values
-        TrafficGUI gui = new TrafficGUI(borderPane, scene, 5, 7);
+        // Rows and cols might not be great on other values; 6 intersections
+        TrafficGUI gui = new TrafficGUI(borderPane, scene, 3, 5);
         gui.setUp();
 
         primaryStage.setScene(scene);

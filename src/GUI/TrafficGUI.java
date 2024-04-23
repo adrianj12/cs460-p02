@@ -18,13 +18,13 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+// TODO Animation Timer
 public class TrafficGUI {
 
     private final BorderPane borderPane;
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
-
-    // Advanced LED Board-7
+    
     private final Font ledFont = Font.loadFont(getClass().getResourceAsStream(
             "../fonts/advanced-led-board-7.regular.ttf"), screenSize.getHeight() / 1.33 / 32.5);
 
@@ -134,7 +134,11 @@ public class TrafficGUI {
             vBox.getChildren().add(hBox);
         }
         vBox.setAlignment(Pos.CENTER);
-        borderPane.setCenter(vBox);
+
+        StackPane roads = new StackPane(vBox);
+        // Vroom vroom
+        roads.getChildren().add(setImageView("car_1.png", size * 0.133)); // TODO car
+        borderPane.setCenter(roads);
     }
 
     /**
@@ -184,7 +188,7 @@ public class TrafficGUI {
      */
     private StackPane makeDMS(double size) {
         StackPane sign = new StackPane();
-        Label signText = new Label("EMERGENCY VEHICLE\nAPPROACHING\nUSE CAUTION!");
+        Label signText = new Label("LINE ONE\nLINE TWO\nLINE THREE");
         signText.setFont(ledFont);
         signText.setAlignment(Pos.TOP_LEFT);
         signText.setBackground(Background.fill(Color.BLACK));
