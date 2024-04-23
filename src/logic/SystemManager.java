@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.Random;
+
 public class SystemManager implements Runnable{
 
     private static int numIntersection = 12;
@@ -23,7 +25,20 @@ public class SystemManager implements Runnable{
     private void createDMS(){}
 
     private int RNGCarRoll(){
-        return 0;
+        Random rand = new Random();
+        int NumOfCarsToCreate = 0;
+        int probability;
+
+        while(true){
+            probability = (int)(Math.random()*100);
+            if(probability <= createCarProbability){
+                NumOfCarsToCreate++;
+            }
+            else {
+                break;
+            }
+        }
+        return NumOfCarsToCreate;
     }
 
 
