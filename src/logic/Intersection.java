@@ -21,6 +21,12 @@ public class Intersection implements Runnable {
         this.eastWestDir = LightDirection.EASTWEST;
         this.northSouthColor = LightColor.GREEN;
         this.eastWestColor = LightColor.RED;
+        this.x0INTX1 = x0INTX1;
+        this.xFINTX1 = xFINTX1;
+        this.y0INTX1 = y0INTX1;
+        this.yFINTX1 = yFINTX1;
+        this.cxINTX1 = cxINTX1;
+        this.cyINTX1 = cyINTX1;
     }
 
     private enum LightColor {
