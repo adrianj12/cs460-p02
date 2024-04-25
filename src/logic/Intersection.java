@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.scene.effect.Light;
+
 public class Intersection implements Runnable {
     private final long greenRedDuration = 5000; // green and red light have minimum of 5 second duration
     private final long yellowDuration = 2000; // yellow light minimum of 2 second duration
@@ -44,13 +46,22 @@ public class Intersection implements Runnable {
     public void run() {
 
     }
-
+    private LightColor oppositeLight(LightColor color){
+        if (color == LightColor.GREEN){
+            return LightColor.RED;
+        }
+        else{
+            return LightColor.GREEN;
+        }
+    }
     // just changes color of the lights
     private void changeLight(LightDirection direction, LightColor newColor) {
         if (direction == LightDirection.NORTHSOUTH) {
             northSouthColor = newColor;
+            eastWestColor = oppositeLight(newColor);
         } else if (direction == LightDirection.EASTWEST) {
             eastWestColor = newColor;
+            northSouthColor = oppositeLight(newColor);
         }
 
         lightChangeTime = System.currentTimeMillis();
