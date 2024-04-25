@@ -23,14 +23,13 @@ public class SystemManager implements Runnable{
     private double East_Lanes[];
     private double West_Lanes[];
     private double North_Lanes[];
-
     private double South_Lanes[];
 
     private double intersectionX_Coordinates[];
     private double intersectionY_Coordinates[];
 
     protected CopyOnWriteArrayList<String> testCarList = new CopyOnWriteArrayList<>();
-    protected CopyOnWriteArrayList<String> testIntersectionList = new CopyOnWriteArrayList<>();
+    public CopyOnWriteArrayList<String> testIntersectionList = new CopyOnWriteArrayList<>();
 
     //protected CopyOnWriteArrayList<Car> Cars = new CopyOnWriteArrayList<>();
     //protected CopyOnWriteArrayList<Thread> CarThreads = new CopyOnWriteArrayList<>();
@@ -135,7 +134,47 @@ public class SystemManager implements Runnable{
         cyINTX6 = (size*2)+(size/2);
 
         String INTX1 = "INTX 1- x0: " + x0INTX1 + " xF: " +xFINTX1 + " y0: " + y0INTX1 + " cx: " + cxINTX1
-                ;
+                +" cy: " + cyINTX1 + " Nlane1: " + North_Lanes[0] + " Nlane2: " + North_Lanes[1] +
+                " Slane1: " + South_Lanes[0] + " Slane2: " + South_Lanes[1] +
+                " Elane1: " + East_Lanes[0] + " Elane2: " + East_Lanes[1] +
+                " Wlane1: " + West_Lanes[0] + " Wlane2: " + West_Lanes[1];
+
+        String INTX2 = "INTX 2- x0: " + x0INTX2 + " xF: " +xFINTX2 + " y0: " + y0INTX2 + " cx: " + cxINTX2
+                +" cy: " + cyINTX2 + " Nlane1: " + North_Lanes[2] + " Nlane2: " + North_Lanes[3] +
+                " Slane1: " + South_Lanes[2] + " Slane2: " + South_Lanes[3] +
+                " Elane1: " + East_Lanes[0] + " Elane2: " + East_Lanes[1] +
+                " Wlane1: " + West_Lanes[0] + " Wlane2: " + West_Lanes[1];
+
+        String INTX3 = "INTX 3- x0: " + x0INTX3 + " xF: " +xFINTX3 + " y0: " + y0INTX3 + " cx: " + cxINTX3
+                +" cy: " + cyINTX3 + " Nlane1: " + North_Lanes[4] + " Nlane2: " + North_Lanes[5] +
+                " Slane1: " + South_Lanes[4] + " Slane2: " + South_Lanes[5] +
+                " Elane1: " + East_Lanes[0] + " Elane2: " + East_Lanes[1] +
+                " Wlane1: " + West_Lanes[0] + " Wlane2: " + West_Lanes[1];
+
+        String INTX4 = "INTX 4- x0: " + x0INTX4 + " xF: " +xFINTX4 + " y0: " + y0INTX4 + " cx: " + cxINTX4
+                +" cy: " + cyINTX4 + " Nlane1: " + North_Lanes[0] + " Nlane2: " + North_Lanes[1] +
+                " Slane1: " + South_Lanes[0] + " Slane2: " + South_Lanes[1] +
+                " Elane1: " + East_Lanes[2] + " Elane2: " + East_Lanes[3] +
+                " Wlane1: " + West_Lanes[2] + " Wlane2: " + West_Lanes[3];
+
+        String INTX5 = "INTX 5- x0: " + x0INTX5 + " xF: " +xFINTX5 + " y0: " + y0INTX5 + " cx: " + cxINTX5
+                +" cy: " + cyINTX5 + " Nlane1: " + North_Lanes[2] + " Nlane2: " + North_Lanes[3] +
+                " Slane1: " + South_Lanes[2] + " Slane2: " + South_Lanes[3] +
+                " Elane1: " + East_Lanes[2] + " Elane2: " + East_Lanes[3] +
+                " Wlane1: " + West_Lanes[2] + " Wlane2: " + West_Lanes[3];
+
+        String INTX6 = "INTX 6- x0: " + x0INTX6 + " xF: " +xFINTX6 + " y0: " + y0INTX6 + " cx: " + cxINTX6
+                +" cy: " + cyINTX6 + " Nlane1: " + North_Lanes[4] + " Nlane2: " + North_Lanes[5] +
+                " Slane1: " + South_Lanes[4] + " Slane2: " + South_Lanes[5] +
+                " Elane1: " + East_Lanes[2] + " Elane2: " + East_Lanes[3] +
+                " Wlane1: " + West_Lanes[2] + " Wlane2: " + West_Lanes[3];
+
+        testIntersectionList.add(INTX1);
+        testIntersectionList.add(INTX2);
+        testIntersectionList.add(INTX3);
+        testIntersectionList.add(INTX4);
+        testIntersectionList.add(INTX5);
+        testIntersectionList.add(INTX6);
 
 
     }
@@ -179,7 +218,13 @@ public class SystemManager implements Runnable{
         createLanes();
         createIntersection();
         createDMS();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
+        /*
         while(true){
             try {
                 //Add if statement for max number of cars
@@ -194,5 +239,6 @@ public class SystemManager implements Runnable{
                 throw new RuntimeException(e);
             }
         }
+        */
     }
 }
