@@ -12,7 +12,7 @@ public class SystemManager implements Runnable{
     private double yLane1, yLane2, yLane3, yLane4, yLane5, yLane6, yLane7, yLane8, yLane9, yLane10,yLane11, yLane12;
     private double x0INTX1, xFINTX1, x0INTX2, xFINTX2, x0INTX3, xFINTX3, x0INTX4, xFINTX4, x0INTX5, xFINTX5, x0INTX6, xFINTX6;
     private double y0INTX1, yFINTX1, y0INTX2, yFINTX2, y0INTX3, yFINTX3, y0INTX4, yFINTX4, y0INTX5, yFINTX5, y0INTX6, yFINTX6;
-    private double cxINTX1, cyINTX1, cxINTX2, cyINTX2, cxINTX3, cyINTX3, cINTX4, cINTX5, cINTX6;
+    private double cxINTX1, cyINTX1, cxINTX2, cyINTX2, cxINTX3, cyINTX3, cxINTX4, cyINTX4, cxINTX5, cyINTX5, cxINTX6, cyINTX6;
     private static int numIntersection = 6;
     protected static int sleepDelay = 10;
     private static int currentCars = 0;
@@ -84,6 +84,58 @@ public class SystemManager implements Runnable{
     }
 
     private void createIntersection(){
+        int i = 0;
+
+        //Intersection 1
+        x0INTX1 = size/5;
+        xFINTX1 = size/1.25;
+        y0INTX1 = size/5;
+        yFINTX1 = size/1.25;
+        cxINTX1 = size/2;
+        cyINTX1 = size/2;
+
+//Intersection 2
+        x0INTX2 = (size*2)+ (size/5);
+        xFINTX2 = (size*2)+ (size/1.25);
+        y0INTX2 = size/5;
+        yFINTX2 = size/1.25;
+        cxINTX2 = (size*2)+ (size/2);
+        cyINTX2 = size/2;
+
+//Intersection 3
+        x0INTX3 = (size*4)+ (size/5);
+        xFINTX3 = (size*4)+ (size/1.25);
+        y0INTX3 = size/5;
+        yFINTX3 = size/1.25;
+        cxINTX3 = (size*4)+ (size/2);
+        cyINTX3 = size/2;
+
+//Intersection 4
+        x0INTX4 = size/5;
+        xFINTX4 = size/1.25;
+        y0INTX4 = (size*2)+(size/5);
+        yFINTX4 = (size*2)+(size/1.25);
+        cyINTX4 = size/2;
+        cyINTX4 = (size*2)+(size/2);
+
+//Intersection 5
+        x0INTX5 = (size*2)+(size/5);
+        xFINTX5 = (size*2)+(size/1.25);
+        y0INTX5 = (size*2)+(size/5);
+        yFINTX5 = (size*2)+(size/1.25);
+        cxINTX5 = (size*2)+(size/2);
+        cyINTX5 = (size*2)+(size/2);
+
+//Intersection = 6
+        x0INTX6 = (size*4)+(size/5);
+        xFINTX6 = (size*4)+(size/1.25);
+        y0INTX6 = (size*2)+(size/5);
+        yFINTX6 = (size*2)+(size/1.25);
+        cxINTX6 = (size*4)+(size/2);
+        cyINTX6 = (size*2)+(size/2);
+
+        String INTX1 = "INTX 1- x0: " + x0INTX1 + " xF: " +xFINTX1 + " y0: " + y0INTX1 + " cx: " + cxINTX1
+                ;
 
 
     }
