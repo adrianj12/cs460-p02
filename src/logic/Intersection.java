@@ -1,6 +1,6 @@
 package logic;
 
-public class Intersection extends Thread {
+public class Intersection implements Runnable {
     private final long greenRedDuration = 5000; // green and red light have minimum of 5 second duration
     private final long yellowDuration = 2000; // yellow light minimum of 2 second duration
     private long lightChangeTime; // time of previous light change
@@ -9,10 +9,12 @@ public class Intersection extends Thread {
     private LightDirection eastWestDir; // direction fo east, west lights
     private LightColor northSouthColor; // color of the north and south lights
     private LightColor eastWestColor; // color of east and west lights
-
+    private double x0INTX1, xFINTX1;
+    private double y0INTX1, yFINTX1;
+    private double cxINTX1, cyINTX1;
 
     // assuming that there will be some sort of number assigned to an intersection so that we can differentiate btwn them
-    public Intersection(int intersectionNumber) {
+    public Intersection(int intersectionNumber, double x0INTX1, double xFINTX1, double y0INTX1, double yFINTX1, double cxINTX1, double cyINTX1) {
         this.lightChangeTime = System.currentTimeMillis();
         this.intersectionNumber = intersectionNumber;
         this.northSouthDir = LightDirection.NORTHSOUTH;
