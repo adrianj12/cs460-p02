@@ -7,29 +7,32 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class SystemManager implements Runnable{
+    IdiotCar idcar;
+
+    int row;
 
     private double size, xLane1, xLane2, xLane3, xLane4, xLane5, xLane6, xLane7, xLane8;
     private double yLane1, yLane2, yLane3, yLane4, yLane5, yLane6, yLane7, yLane8, yLane9, yLane10,yLane11, yLane12;
     private double x0INTX1, xFINTX1, x0INTX2, xFINTX2, x0INTX3, xFINTX3, x0INTX4, xFINTX4, x0INTX5, xFINTX5, x0INTX6, xFINTX6;
     private double y0INTX1, yFINTX1, y0INTX2, yFINTX2, y0INTX3, yFINTX3, y0INTX4, yFINTX4, y0INTX5, yFINTX5, y0INTX6, yFINTX6;
     private double cxINTX1, cyINTX1, cxINTX2, cyINTX2, cxINTX3, cyINTX3, cxINTX4, cyINTX4, cxINTX5, cyINTX5, cxINTX6, cyINTX6;
-    private static int numIntersection = 6;
-    protected static int sleepDelay = 10;
+    private static int carID = 0;
+    protected static int sleepDelay = 3000;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
-    protected static int createVehicleProbability = 20;
-    protected static int createEMSProbability = 5;
+    protected static int createVehicleProbability = 70;
+    protected static int createEMSProbability = 25;
     private static String direction[] = {"North", "South", "East", "West"};
     private double East_Lanes[];
     private double West_Lanes[];
     private double North_Lanes[];
     private double South_Lanes[];
 
-    private double intersectionX_Coordinates[];
-    private double intersectionY_Coordinates[];
-
-    protected CopyOnWriteArrayList<String> testCarList = new CopyOnWriteArrayList<>();
+    protected static CopyOnWriteArrayList<String> testCarList = new CopyOnWriteArrayList<>();
     public CopyOnWriteArrayList<String> testIntersectionList = new CopyOnWriteArrayList<>();
+
+    public static CopyOnWriteArrayList<IdiotCar> testCars = new CopyOnWriteArrayList<>();
+    protected static CopyOnWriteArrayList<Thread> testCarThread = new CopyOnWriteArrayList<>();
 
     //protected CopyOnWriteArrayList<Car> Cars = new CopyOnWriteArrayList<>();
     //protected CopyOnWriteArrayList<Thread> CarThreads = new CopyOnWriteArrayList<>();
@@ -39,6 +42,7 @@ public class SystemManager implements Runnable{
 
     public SystemManager(int rows){
          size = Screen.getPrimary().getBounds().getHeight() / (rows + 1);
+         row = rows;
     }
 
     private void createLanes(){
@@ -181,8 +185,52 @@ public class SystemManager implements Runnable{
 
     private void createVehicle(){
         //RNG EMS vehicle creation.
-        //add to list
+        int EMSprobability;
+        int directionRNG;
+        String car;
+        EMSprobability = (int)(Math.random()*100);
+        directionRNG = (int)(Math.random()*(4));
+        double startingX = 0;
+        double startingY = 0;
+        String getDirection = direction[directionRNG];
+
+        if(getDirection.equals("North")){
+            directionRNG = (int)(Math.random()*(North_Lanes.length-1));
+            startingY = size*3;
+            startingX = North_Lanes[directionRNG];
+        }
+        else if(getDirection.equals("South")){
+            directionRNG = (int)(Math.random()*(South_Lanes.length-1));
+            startingY = 0;
+            startingX = South_Lanes[directionRNG];
+        }
+        else if(getDirection.equals("East")){
+            directionRNG = (int)(Math.random()*(East_Lanes.length-1));
+            startingY = East_Lanes[directionRNG];
+            startingX = 0;
+        }
+        else if(getDirection.equals("West")){
+            directionRNG = (int)(Math.random()*(West_Lanes.length-1));
+            startingY = West_Lanes[directionRNG];
+            startingX = size*5;
+        }
+
+        if(EMSprobability < createEMSProbability){
+            //car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
+            idcar = new IdiotCar(carID, getDirection, startingX, startingY, row);
+        }
+        else{
+            //car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
+            idcar = new IdiotCar(carID, getDirection, startingX, startingY, row);
+        }
+        //System.out.println(car);
+        //testCarList.add(car);
+        testCars.add(idcar);
+        Thread IDcar = new Thread(idcar);
+        testCarThread.add(IDcar);
+        IDcar.start();
         currentCars++;
+        carID++;
     }
 
     private void createDMS(){}
@@ -194,22 +242,33 @@ public class SystemManager implements Runnable{
 
         while(true){
             probability = (int)(Math.random()*100);
+            //System.out.println("RNGCarRoll: " + probability + " max prop: " + createVehicleProbability);
             if(NumOfCarsToCreate + currentCars >= maxNumCars) {
                 break;
             }
+
             if(probability < createVehicleProbability){
                 NumOfCarsToCreate++;
+                //System.out.println("number of cars to make: " + NumOfCarsToCreate);
             }
 
-            else {
+            else if(probability > createVehicleProbability){
                 break;
             }
         }
+        //System.out.println("number of cars to make: " + NumOfCarsToCreate);
         return NumOfCarsToCreate;
     }
 
     private void removeVehicles(){
-        //currentCars--;
+        int testprobability = (int)(Math.random()*100);
+        size = testCarList.size();
+        if(testprobability < 25 && size > 0){
+            int removeRNG = (int)(Math.random()*size);
+            //System.out.println("Removed Car: " + testCarList.get(removeRNG));
+            testCarList.remove(removeRNG);
+            currentCars--;
+        }
     }
 
     @Override
@@ -218,27 +277,20 @@ public class SystemManager implements Runnable{
         createLanes();
         createIntersection();
         createDMS();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
-        /*
         while(true){
             try {
                 //Add if statement for max number of cars
                 numCarCreate = RNGCarRoll();
                 for(int i = 0; i < numCarCreate; i++){
                     createVehicle();
-                    TimeUnit.SECONDS.sleep(2);
+                    TimeUnit.SECONDS.sleep(3);
                 }
-                Thread.sleep(sleepDelay);
                 removeVehicles();
+                Thread.sleep(sleepDelay);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-        */
     }
 }
