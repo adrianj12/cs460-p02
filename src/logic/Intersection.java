@@ -1,7 +1,5 @@
 package logic;
 
-import javafx.scene.effect.Light;
-
 public class Intersection implements Runnable {
     private final long greenRedDuration = 5000; // green and red light have minimum of 5 second duration
     private final long yellowDuration = 2000; // yellow light minimum of 2 second duration
@@ -66,12 +64,30 @@ public class Intersection implements Runnable {
 
         lightChangeTime = System.currentTimeMillis();
     }
-
+    public LightColor getEWState(){
+        return eastWestColor;
+    }
+    public LightColor getNSState(){
+        return northSouthColor;
+    }
+    public int getID(){
+        return intersectionNumber;
+    }
     // changes state of intersection based on time, will call changeLight method
     private void updateIntersection() {
         long currentTime = System.currentTimeMillis();
         if ((eastWestColor == LightColor.GREEN || eastWestColor == LightColor.RED) && (currentTime-lightChangeTime>= greenRedDuration)){
-            changeLight(eastWestDir, eastWestColor);
+            changeLight(eastWestDir, oppositeLight(eastWestColor));
+        }
+        if(eastWestColor == LightColor.YELLOW  && currentTime-lightChangeTime>= yellowDuration){
+            eastWestColor = LightColor.RED;
+            northSouthColor = LightColor.GREEN;
+            lightChangeTime = System.currentTimeMillis();
+        }
+        else if(northSouthColor == LightColor.YELLOW  && currentTime-lightChangeTime>= yellowDuration){
+            northSouthColor = LightColor.RED;
+            eastWestColor = LightColor.GREEN;
+            lightChangeTime = System.currentTimeMillis();
         }
     }
 }
