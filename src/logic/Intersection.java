@@ -9,6 +9,8 @@ public class Intersection implements Runnable {
     private LightDirection eastWestDir; // direction fo east, west lights
     private LightColor northSouthColor; // color of the north and south lights
     private LightColor eastWestColor; // color of east and west lights
+    private int eastWestAcc;
+    private int northSouthAcc;
     private double x0INTX1, xFINTX1;
     private double y0INTX1, yFINTX1;
     private double cxINTX1, cyINTX1;
@@ -27,6 +29,8 @@ public class Intersection implements Runnable {
         this.yFINTX1 = yFINTX1;
         this.cxINTX1 = cxINTX1;
         this.cyINTX1 = cyINTX1;
+        this.eastWestAcc = 0; //traffic accumulator
+        this.northSouthAcc = 0;
     }
 
     private enum LightColor {
@@ -72,6 +76,10 @@ public class Intersection implements Runnable {
     }
     public int getID(){
         return intersectionNumber;
+    }
+    public double[] getCoords(){
+        return new double[]{x0INTX1,xFINTX1, y0INTX1, yFINTX1, cxINTX1, cyINTX1};
+
     }
     // changes state of intersection based on time, will call changeLight method
     private void updateIntersection() {
