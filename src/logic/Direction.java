@@ -1,23 +1,22 @@
 package logic;
+
+import java.awt.*;
+
 public enum Direction {
-    NORTH(0, -1),
-    SOUTH(0, 1),
-    EAST(1, 0),
-    WEST(-1, 0);
+    NORTH(new Point(0,-1)),
+    SOUTH(new Point(0,1)),
+    EAST(new Point(1,0)),
+    WEST(new Point(-1,0));
 
-    private final int deltaX; // Change in X coordinate
-    private final int deltaY; // Change in Y coordinate
+    private Point deltaDirection = new Point();
 
-    Direction(int deltaX, int deltaY) {
-        this.deltaX = deltaX;
-        this.deltaY = deltaY;
+
+    Direction(Point point) {
+        this.deltaDirection = point;
     }
 
-    public int getDeltaX() {
-        return deltaX;
+    public Point getDeltaDirection() {
+        return this.deltaDirection;
     }
 
-    public int getDeltaY() {
-        return deltaY;
-    }
 }
