@@ -17,7 +17,7 @@ public class SystemManager implements Runnable{
     protected static int sleepDelay = 3000;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
-    protected static int createVehicleProbability = 40;
+    protected static int createVehicleProbability = 55;
     protected static int createEMSProbability = 25;
     private static String direction[] = {"North", "South", "East", "West"};
     private double East_Lanes[];
@@ -25,7 +25,7 @@ public class SystemManager implements Runnable{
     private double North_Lanes[];
     private double South_Lanes[];
 
-    protected CopyOnWriteArrayList<String> testCarList = new CopyOnWriteArrayList<>();
+    protected static CopyOnWriteArrayList<String> testCarList = new CopyOnWriteArrayList<>();
     public CopyOnWriteArrayList<String> testIntersectionList = new CopyOnWriteArrayList<>();
 
     //protected CopyOnWriteArrayList<Car> Cars = new CopyOnWriteArrayList<>();
@@ -215,7 +215,7 @@ public class SystemManager implements Runnable{
         else{
             car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
         }
-        System.out.println(car);
+        //System.out.println(car);
         testCarList.add(car);
         currentCars++;
         carID++;
@@ -244,16 +244,16 @@ public class SystemManager implements Runnable{
                 break;
             }
         }
-        System.out.println("number of cars to make: " + NumOfCarsToCreate);
+        //System.out.println("number of cars to make: " + NumOfCarsToCreate);
         return NumOfCarsToCreate;
     }
 
     private void removeVehicles(){
         int testprobability = (int)(Math.random()*100);
         size = testCarList.size();
-        if(testprobability < 5 && size > 0){
+        if(testprobability < 25 && size > 0){
             int removeRNG = (int)(Math.random()*size);
-            System.out.println("Removed Car: " + testCarList.get(removeRNG));
+            //System.out.println("Removed Car: " + testCarList.get(removeRNG));
             testCarList.remove(removeRNG);
             currentCars--;
         }
