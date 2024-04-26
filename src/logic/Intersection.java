@@ -4,6 +4,7 @@ public class Intersection implements Runnable {
     private final long greenRedDuration = 5000; // green and red light have minimum of 5 second duration
     private final long yellowDuration = 2000; // yellow light minimum of 2 second duration
     private final long accLimit = 10;// number of cars required to change light
+    private final long minLength = 3000;
     private long lightChangeTime; // time of previous light change
     private final int intersectionNumber; //
     private LightDirection northSouthDir; // direction of north, south lights
@@ -96,9 +97,14 @@ public class Intersection implements Runnable {
     private void updateIntersection() {
         long currentTime = System.currentTimeMillis();
         if (((eastWestColor == LightColor.GREEN || eastWestColor == LightColor.RED) && (currentTime-lightChangeTime>= greenRedDuration))
-        || eastWestAcc>=accLimit){
+        || (eastWestAcc>=accLimit && currentTime-lightChangeTime >= minLength)){
             changeLight(eastWestDir, oppositeLight(eastWestColor));
         }
+        if(northSouthAcc>=accLimit&& currentTime-lightChangeTime >= minLength){
+            changeLight(northSouthDir, oppositeLight(northSouthColor));
+        }
+
+        //handles yellow light timing (unaffected by volume)
         if(eastWestColor == LightColor.YELLOW  && currentTime-lightChangeTime>= yellowDuration){
             eastWestColor = LightColor.RED;
             northSouthColor = LightColor.GREEN;
