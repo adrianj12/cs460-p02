@@ -8,11 +8,11 @@ public class IdiotCar implements Runnable {
     protected boolean running = true;
     int id;
     String direction;
-    int x;
-    int y;
+    double x;
+    double y;
     int driveDistance = 10;
-    int sleepTime = 10;
-    public IdiotCar(int ID, String dir, int xCoor, int yCoor, int rows){
+    int sleepTime = 1000;
+    public IdiotCar(int ID, String dir, double xCoor, double yCoor, int rows){
         id = ID;
         direction = dir;
         x = xCoor;
@@ -22,22 +22,22 @@ public class IdiotCar implements Runnable {
 
     private void drive(){
         if(direction.equals("North")){
-            x = x - driveDistance;
+            y = y - driveDistance;
         }
         else if(direction.equals("South")){
-            x = x + driveDistance;
-        }
-        else if(direction.equals("East")){
             y = y + driveDistance;
         }
+        else if(direction.equals("East")){
+            x = x + driveDistance;
+        }
         else if(direction.equals("West")){
-            y = y - driveDistance;
+            x = x - driveDistance;
         }
         cah().setCenterX(x);
         cah().setCenterY(y);
     }
 
-    protected Circle cah(){
+    public Circle cah(){
         Circle carGUI = new Circle();
         carGUI.setRadius(6.0f);
         carGUI.setCenterX(x);
@@ -47,7 +47,7 @@ public class IdiotCar implements Runnable {
 
     private void stop(){
         if(direction.equals("North")){
-            if(y < size*(-2)){
+            if(y < size*(-5)){
                 running = false;
             }
         }
@@ -57,12 +57,12 @@ public class IdiotCar implements Runnable {
             }
         }
         else if(direction.equals("East")){
-            if(x > size*(3)){
+            if(x > size*(6)){
                 running = false;
             }
         }
         else if(direction.equals("West")){
-            if(x < size*(-2)){
+            if(x < size*(-6)){
                 running = false;
             }
         }

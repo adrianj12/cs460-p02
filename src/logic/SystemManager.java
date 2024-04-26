@@ -7,6 +7,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class SystemManager implements Runnable{
+    IdiotCar idcar;
+
+    int row;
 
     private double size, xLane1, xLane2, xLane3, xLane4, xLane5, xLane6, xLane7, xLane8;
     private double yLane1, yLane2, yLane3, yLane4, yLane5, yLane6, yLane7, yLane8, yLane9, yLane10,yLane11, yLane12;
@@ -17,7 +20,7 @@ public class SystemManager implements Runnable{
     protected static int sleepDelay = 3000;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
-    protected static int createVehicleProbability = 55;
+    protected static int createVehicleProbability = 70;
     protected static int createEMSProbability = 25;
     private static String direction[] = {"North", "South", "East", "West"};
     private double East_Lanes[];
@@ -28,6 +31,9 @@ public class SystemManager implements Runnable{
     protected static CopyOnWriteArrayList<String> testCarList = new CopyOnWriteArrayList<>();
     public CopyOnWriteArrayList<String> testIntersectionList = new CopyOnWriteArrayList<>();
 
+    public static CopyOnWriteArrayList<IdiotCar> testCars = new CopyOnWriteArrayList<>();
+    protected static CopyOnWriteArrayList<Thread> testCarThread = new CopyOnWriteArrayList<>();
+
     //protected CopyOnWriteArrayList<Car> Cars = new CopyOnWriteArrayList<>();
     //protected CopyOnWriteArrayList<Thread> CarThreads = new CopyOnWriteArrayList<>();
     //protected CopyOnWriteArrayList<Intersection> intersections = new CopyOnWriteArrayList<>();
@@ -36,6 +42,7 @@ public class SystemManager implements Runnable{
 
     public SystemManager(int rows){
          size = Screen.getPrimary().getBounds().getHeight() / (rows + 1);
+         row = rows;
     }
 
     private void createLanes(){
@@ -209,14 +216,19 @@ public class SystemManager implements Runnable{
         }
 
         if(EMSprobability < createEMSProbability){
-            car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
-
+            //car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
+            idcar = new IdiotCar(carID, getDirection, startingX, startingY, row);
         }
         else{
-            car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
+            //car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
+            idcar = new IdiotCar(carID, getDirection, startingX, startingY, row);
         }
         //System.out.println(car);
-        testCarList.add(car);
+        //testCarList.add(car);
+        testCars.add(idcar);
+        Thread IDcar = new Thread(idcar);
+        testCarThread.add(IDcar);
+        IDcar.start();
         currentCars++;
         carID++;
     }
