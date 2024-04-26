@@ -46,7 +46,14 @@ public class Intersection implements Runnable {
 
     @Override
     public void run() {
-
+        while (true) {
+            updateIntersection();
+            try {
+                Thread.sleep(100);//ms
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
     private LightColor oppositeLight(LightColor color){
         if (color == LightColor.GREEN){
