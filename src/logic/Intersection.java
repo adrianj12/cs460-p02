@@ -3,6 +3,7 @@ package logic;
 public class Intersection implements Runnable {
     private final long greenRedDuration = 5000; // green and red light have minimum of 5 second duration
     private final long yellowDuration = 2000; // yellow light minimum of 2 second duration
+    private final long accLimit = 10;// number of cars required to change light
     private long lightChangeTime; // time of previous light change
     private final int intersectionNumber; //
     private LightDirection northSouthDir; // direction of north, south lights
@@ -59,6 +60,9 @@ public class Intersection implements Runnable {
         if (color == LightColor.GREEN){
             return LightColor.YELLOW;
         }
+        else if(color == LightColor.YELLOW){//keeps the other light red for duration of yellow
+            return LightColor.RED;
+        }
         else{
             return LightColor.GREEN;
         }
@@ -91,7 +95,8 @@ public class Intersection implements Runnable {
     // changes state of intersection based on time, will call changeLight method
     private void updateIntersection() {
         long currentTime = System.currentTimeMillis();
-        if ((eastWestColor == LightColor.GREEN || eastWestColor == LightColor.RED) && (currentTime-lightChangeTime>= greenRedDuration)){
+        if (((eastWestColor == LightColor.GREEN || eastWestColor == LightColor.RED) && (currentTime-lightChangeTime>= greenRedDuration))
+        || eastWestAcc>=accLimit){
             changeLight(eastWestDir, oppositeLight(eastWestColor));
         }
         if(eastWestColor == LightColor.YELLOW  && currentTime-lightChangeTime>= yellowDuration){
