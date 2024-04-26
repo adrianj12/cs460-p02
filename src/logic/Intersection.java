@@ -48,7 +48,7 @@ public class Intersection implements Runnable {
     }
     private LightColor oppositeLight(LightColor color){
         if (color == LightColor.GREEN){
-            return LightColor.RED;
+            return LightColor.YELLOW;
         }
         else{
             return LightColor.GREEN;
@@ -70,5 +70,8 @@ public class Intersection implements Runnable {
     // changes state of intersection based on time, will call changeLight method
     private void updateIntersection() {
         long currentTime = System.currentTimeMillis();
+        if ((eastWestColor == LightColor.GREEN || eastWestColor == LightColor.RED) && (currentTime-lightChangeTime>= greenRedDuration)){
+            changeLight(eastWestDir, eastWestColor);
+        }
     }
 }
