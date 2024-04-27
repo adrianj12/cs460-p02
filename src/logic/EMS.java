@@ -3,7 +3,8 @@ public class EMS extends Vehicle {
 
 private boolean running;
 
-    public void move() {
+    public boolean move() {
+        return false;
     }
 
     @Override
