@@ -17,16 +17,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
+import logic.Intersection;
+import java.util.Random;
 // TODO Animation Timer
 public class TrafficGUI {
 
     private final BorderPane borderPane;
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
-    
+    public static ImageView[] images = new ImageView[6];
     private final Font ledFont = Font.loadFont(getClass().getResourceAsStream(
             "../fonts/advanced-led-board-7.regular.ttf"), screenSize.getHeight() / 1.33 / 32.5);
+
 
     private final Stage popUp = new Stage();
     private final int rows;
@@ -46,6 +48,7 @@ public class TrafficGUI {
         this.scene = scene;
         this.rows = rows;
         this.cols = cols;
+
     }
 
     /**
@@ -54,22 +57,30 @@ public class TrafficGUI {
     public void setUp() {
         double size = screenSize.getHeight() / (rows + 1);
         VBox vBox = new VBox();
-
+        Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-
+        Intersection[] intArray = new Intersection[6];
+        Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
+        int k = 0;
         for(int i = 0; i < rows; i++) {
             HBox hBox = new HBox();
             boolean inter = true;
             for (int j = 0; j < cols; j++) {
                 ImageView imageView;
-
                 // TODO: This sets alternating roads and intersections, later won't be so boring (time permitting)
                 if(i % 2 == 0) {
                     if (inter) {
-                        imageView = setImageView("intersection lights (three-quarter).png", size);
+                        int rand = randy.nextInt(2);
+                        intArray[k]= new Intersection(k, 1, 2, 3, 4, 5, 6,colors[rand], colors[1-rand]);
+                        Thread intersectionThread= new Thread(intArray[k]);
+                        intersectionThread.start();
+                        imageView = setImageView("redgreen.png", size);
+                        images[k]= imageView;
                         inter = false;
-                    } else {
+                        k++;
+                    }
+                    else {
                         imageView = setImageView("east-west (three-quarter).png", size);
                         inter = true;
                     }
