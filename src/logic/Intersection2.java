@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Intersection2 {
 
+    private int id;
     private Point center;
     // northStop = boundary incoming cars from NORTH may not cross when RED
     // north/south refer to a Y coordinate, east/west X coordinate
@@ -50,10 +51,75 @@ public class Intersection2 {
         this.exits.add(westLeft);
         this.exits.add(westRight);//7
 
+    }
+
+    public int getNorthStop(){
+        return this.northStop;
+    }
+    public int getSouthStop(){
+        return this.southStop;
+    }
+    public int getEastStop(){
+        return this.eastStop;
+    }
+    public int getWestStop(){
+        return this.westStop;
+    }
+
+    public int getNorthBarrier(){
+        return this.northBarrier;
+    }
+    public int getSouthBarrier(){
+        return this.southBarrier;
+    }
+    public int getEastBarrier(){
+        return this.eastBarrier;
+    }
+    public int getWestBarrier(){
+        return this.westBarrier;
+    }
+
+    // Parameter: dir = current direction of incoming car
+    public Point getLeftTurn(Direction dir){
+        switch (dir) {
+            case NORTH:
+                // code block
+                return exits.get(6);
+            case SOUTH:
+                // code block
+                return exits.get(2);
+
+            case EAST:
+                // code block
+                return exits.get(0);
+            case WEST:
+                // code block
+                return exits.get(4);
+            // add more cases as needed
+        }
+        return null;
 
     }
 
+    // Parameter: dir = current direction of incoming car
+    public Point getRightTurn(Direction dir){
+        switch (dir) {
+            case NORTH:
+                // code block
+                return exits.get(3);
+            case SOUTH:
+                // code block
+                return exits.get(7);
 
-
+            case EAST:
+                // code block
+                return exits.get(5);
+            case WEST:
+                // code block
+                return exits.get(1);
+            // add more cases as needed
+        }
+        return null;
+    }
 
 }
