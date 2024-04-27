@@ -14,14 +14,19 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import logic.Intersection;
+import java.util.Random;
+
 /**
  * Main class for the GUI
  */
+// TODO Animation Timer
 public class TrafficGUI {
 
     private final BorderPane borderPane;
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
+    public static ImageView[] images = new ImageView[6];
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
@@ -67,21 +72,31 @@ public class TrafficGUI {
         VBox vBox = new VBox();
         int interIndex = -1;
 
+        Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
+        Intersection[] intArray = new Intersection[6];
+        Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
 
         for(int i = 0; i < rows; i++) {
             HBox hBox = new HBox();
             boolean inter = true;
             for (int j = 0; j < cols; j++) {
                 ImageView imageView;
-
+                // TODO: This sets alternating roads and intersections, later won't be so boring (time permitting)
                 if(i % 2 == 0) {
                     if (inter) {
-                        imageView = setImageView("intersection lights (three-quarter).png", size);
-                        inter = false;
+                        int rand = randy.nextInt(2);
                         interIndex++;
-                    } else {
+                        intArray[interIndex]= new Intersection(interIndex, 1, 2, 3, 4,
+                                5, 6,colors[rand], colors[1-rand]);
+                        Thread intersectionThread= new Thread(intArray[interIndex]);
+                        intersectionThread.start();
+                        imageView = setImageView("redgreen.png", size);
+                        images[interIndex]= imageView;
+                        inter = false;
+                    }
+                    else {
                         imageView = setImageView("east-west (three-quarter).png", size);
                         inter = true;
                     }
