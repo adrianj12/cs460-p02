@@ -28,7 +28,7 @@ public class TrafficGUI {
     public static ImageView[] images = new ImageView[6];
     private final Font ledFont = Font.loadFont(getClass().getResourceAsStream(
             "../fonts/advanced-led-board-7.regular.ttf"), screenSize.getHeight() / 1.33 / 32.5);
-
+    private Intersection[] intArray = new Intersection[6];
 
     private final Stage popUp = new Stage();
     private final int rows;
@@ -60,7 +60,7 @@ public class TrafficGUI {
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-        Intersection[] intArray = new Intersection[6];
+
         Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
 
         int k = 0;
@@ -169,7 +169,8 @@ public class TrafficGUI {
             StackPane stackRoad = new StackPane();
             if(i % 2 != 0) {
                 stackRoad.getChildren().add(setImageView("grass.png", size));
-                stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
+                System.out.printf("thisis the image %s",intArray[k].getImage() );
+                stackRoad.getChildren().add(setImageView(intArray[k].getImage(), size));
                 k++;
             }
             else {
