@@ -24,13 +24,13 @@ public class Intersection implements Runnable {
     private double cxINTX1, cyINTX1;
 
     // assuming that there will be some sort of number assigned to an intersection so that we can differentiate btwn them
-    public Intersection(int intersectionNumber, double x0INTX1, double xFINTX1, double y0INTX1, double yFINTX1, double cxINTX1, double cyINTX1) {
+    public Intersection(int intersectionNumber, double x0INTX1, double xFINTX1, double y0INTX1, double yFINTX1, double cxINTX1, double cyINTX1, LightColor eastLight, LightColor northLight) {
         this.lightChangeTime = System.currentTimeMillis();
         this.intersectionNumber = intersectionNumber;
         this.northSouthDir = LightDirection.NORTHSOUTH;
         this.eastWestDir = LightDirection.EASTWEST;
-        this.northSouthColor = LightColor.GREEN;
-        this.eastWestColor = LightColor.RED;
+        this.northSouthColor =northLight;
+        this.eastWestColor = eastLight;
         this.x0INTX1 = x0INTX1;
         this.xFINTX1 = xFINTX1;
         this.y0INTX1 = y0INTX1;
@@ -43,7 +43,7 @@ public class Intersection implements Runnable {
 
     }
 
-    private enum LightColor {
+    public enum LightColor {
         RED,
         YELLOW,
         GREEN
