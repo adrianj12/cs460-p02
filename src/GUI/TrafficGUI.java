@@ -1,24 +1,25 @@
 package GUI;
 
-import javafx.geometry.Insets;
+import javafx.animation.AnimationTimer;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
 import logic.Intersection;
 import java.util.Random;
+
+/**
+ * Main class for the GUI
+ */
 // TODO Animation Timer
 public class TrafficGUI {
 
@@ -26,17 +27,20 @@ public class TrafficGUI {
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
     public static ImageView[] images = new ImageView[6];
+<<<<<<< HEAD
     private final Font ledFont = Font.loadFont(getClass().getResourceAsStream(
             "../fonts/advanced-led-board-7.regular.ttf"), screenSize.getHeight() / 1.33 / 32.5);
     private Intersection[] intArray = new Intersection[6];
 
+=======
+>>>>>>> 5d0854ea0ac20618bf86a9106b1130bbc0f59544
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
+    private final PopUpWindow popUpWindow;
 
     /**
      * GUI for the program
-     * TODO: Might have play/pause but will have an animation timer for cars
      *
      * @param borderPane BorderPane to use
      * @param scene main scene
@@ -48,7 +52,23 @@ public class TrafficGUI {
         this.scene = scene;
         this.rows = rows;
         this.cols = cols;
+        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33);
 
+        //startTimer();
+    }
+
+    /**
+     * AnimationTimer for cars
+     * TODO: Cars (aka vroom vroom)
+     */
+    private void startTimer() {
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+
+            }
+        };
+        timer.start();
     }
 
     /**
@@ -57,13 +77,13 @@ public class TrafficGUI {
     public void setUp() {
         double size = screenSize.getHeight() / (rows + 1);
         VBox vBox = new VBox();
+        int interIndex = -1;
+
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
 
         Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
-
-        int k = 0;
         for(int i = 0; i < rows; i++) {
             HBox hBox = new HBox();
             boolean inter = true;
@@ -73,14 +93,14 @@ public class TrafficGUI {
                 if(i % 2 == 0) {
                     if (inter) {
                         int rand = randy.nextInt(2);
-                        intArray[k]= new Intersection(k, 1, 2, 3, 4, 5, 6,colors[rand], colors[1-rand]);
-                        Thread intersectionThread= new Thread(intArray[k]);
+                        interIndex++;
+                        intArray[interIndex]= new Intersection(interIndex, 1, 2, 3, 4,
+                                5, 6,colors[rand], colors[1-rand]);
+                        Thread intersectionThread= new Thread(intArray[interIndex]);
                         intersectionThread.start();
                         imageView = setImageView("redgreen.png", size);
-                        images[k]= imageView;
-
+                        images[interIndex]= imageView;
                         inter = false;
-                        k++;
                     }
                     else {
                         imageView = setImageView("east-west (three-quarter).png", size);
@@ -111,6 +131,7 @@ public class TrafficGUI {
                 Color green = Color.web("0x468D34", 1.0);
 
                 // For the popup window
+                int finalInterIndex = interIndex;
                 stackPane.setOnMouseClicked((MouseEvent e) -> {
                     if(popUp.isShowing()) {
                         popUp.close();
@@ -118,10 +139,7 @@ public class TrafficGUI {
                     if(finalI % 2 == 0 && !finalInter) {
                         BorderPane popUpBorder = new BorderPane();
                         popUpBorder.setBackground(new Background(new BackgroundFill(green, null , null)));
-
-                        StackPane popUpStack = getPopUp();
-
-                        popUpBorder.setCenter(popUpStack);
+                        popUpBorder.setCenter(popUpWindow.getPopUp(finalInterIndex));
                         popUp.setScene(new Scene(popUpBorder));
                         popUp.show();
                     }
@@ -149,12 +167,14 @@ public class TrafficGUI {
         vBox.setAlignment(Pos.CENTER);
 
         StackPane roads = new StackPane(vBox);
-        // Vroom vroom
-        roads.getChildren().add(setImageView("car_1.png", size * 0.133)); // TODO car
+        // TODO Vroom vroom
+        roads.getChildren().add(setImageView("car_1.png", size * 0.133));
+        roads.getChildren().add(setImageView("ambulance.png", size * 0.133));
         borderPane.setCenter(roads);
     }
 
     /**
+<<<<<<< HEAD
      * TODO: This will take params later for the DMS and lights, and other things
      *       that make this show something that isn't just the intersection image
      *
@@ -169,7 +189,6 @@ public class TrafficGUI {
             StackPane stackRoad = new StackPane();
             if(i % 2 != 0) {
                 stackRoad.getChildren().add(setImageView("grass.png", size));
-                System.out.printf("thisis the image %s",intArray[k].getImage() );
                 stackRoad.getChildren().add(setImageView(intArray[k].getImage(), size));
                 k++;
             }
@@ -217,13 +236,15 @@ public class TrafficGUI {
     }
 
     /**
+=======
+>>>>>>> 5d0854ea0ac20618bf86a9106b1130bbc0f59544
      * Sets ImageView
      *
      * @param file File string
      * @param size Size of ImageView
      * @return Sized ImageView
      */
-    private ImageView setImageView(String file, double size) {
+    public static ImageView setImageView(String file, double size) {
         ImageView imageView = new ImageView(file);
         imageView.setPreserveRatio(true);
         if(imageView.getFitHeight() >= imageView.getFitWidth()) {
