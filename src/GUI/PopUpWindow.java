@@ -72,11 +72,14 @@ public class PopUpWindow {
     private StackPane makePopUp() {
         HBox horizontalPopUp = new HBox();
         horizontalPopUp.setSpacing(-1);
+        int k = 0;
         for (int i = 0; i < 3; i++) {
             StackPane stackRoad = new StackPane();
             if(i % 2 != 0) {
                 stackRoad.getChildren().add(setImageView("grass.png", size));
-                stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
+                System.out.printf("this is the return %s\n", TrafficGUI.images[k].getImage());
+                stackRoad.getChildren().add(setImageView("redyellow.png", size));
+                k++;
             }
             else {
                 stackRoad.getChildren().add(setImageView("grass zoom.png", size));
