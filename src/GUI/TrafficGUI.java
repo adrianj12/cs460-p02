@@ -77,7 +77,6 @@ public class TrafficGUI {
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
         Intersection[] intArray = new Intersection[6];
         Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
-
         for(int i = 0; i < rows; i++) {
             HBox hBox = new HBox();
             boolean inter = true;
@@ -113,7 +112,7 @@ public class TrafficGUI {
                     }
                 }
 
-                ImageView grass = setImageView("grass.png", size);
+                ImageView grass = setImageView("grassTrees.png", size);
 
                 StackPane stackPane = new StackPane(grass, imageView);
                 Circle overlay = new Circle(size / 2 - 5);
