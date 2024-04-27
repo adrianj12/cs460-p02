@@ -11,12 +11,15 @@ public class Car extends Vehicle {
     }
 
 
-    public void move() {
+    // returns true if the car moves
+    public boolean move() {
+        return false;
     }
 
     @Override
     public void run() {
         while (running) {
+            move();
 
             // do stuff
             break;

@@ -1,11 +1,14 @@
 package logic;
+
+import java.awt.*;
+
 public abstract class Vehicle implements Runnable {
     private Direction currentDir;
     private int speed = 0;
     private float transparency = 0;
     private boolean intersectionFlag = false;
     private int minBufferDistance = 10;
-    private int X_loc, Y_loc;
+    private Point location = new Point();
     private boolean running = false;
 
     public Direction getDirection(){
@@ -40,23 +43,15 @@ public abstract class Vehicle implements Runnable {
         this.intersectionFlag = !this.intersectionFlag;
     }
 
-    public int getX_loc(){
-        return this.X_loc;
+    public Point getLocation(){
+        return this.location;
     }
 
-    public int getY_loc(){
-        return this.Y_loc;
+    public void setPoint(Point p){
+        this.location = p;
     }
 
-    public void setX_loc(int X_loc){
-        this.X_loc = X_loc;
-    }
-
-    public void setY_loc(int Y_loc){
-        this.Y_loc = Y_loc;
-    }
-
-    public abstract void move();
+    public abstract boolean move();
 
     @Override
     public abstract void run();
