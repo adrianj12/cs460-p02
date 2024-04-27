@@ -27,13 +27,6 @@ public class TrafficGUI {
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
     public static ImageView[] images = new ImageView[6];
-<<<<<<< HEAD
-    private final Font ledFont = Font.loadFont(getClass().getResourceAsStream(
-            "../fonts/advanced-led-board-7.regular.ttf"), screenSize.getHeight() / 1.33 / 32.5);
-    private Intersection[] intArray = new Intersection[6];
-
-=======
->>>>>>> 5d0854ea0ac20618bf86a9106b1130bbc0f59544
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
@@ -82,7 +75,7 @@ public class TrafficGUI {
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-
+        Intersection[] intArray = new Intersection[6];
         Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
         for(int i = 0; i < rows; i++) {
             HBox hBox = new HBox();
@@ -174,70 +167,6 @@ public class TrafficGUI {
     }
 
     /**
-<<<<<<< HEAD
-     * TODO: This will take params later for the DMS and lights, and other things
-     *       that make this show something that isn't just the intersection image
-     *
-     * @return StackPane of zoom in
-     */
-    private StackPane getPopUp() {
-        HBox horizontalPopUp = new HBox();
-        horizontalPopUp.setSpacing(-1);
-        int k =0;
-        double size = screenSize.getHeight() / 1.33;
-        for (int i = 0; i < 3; i++) {
-            StackPane stackRoad = new StackPane();
-            if(i % 2 != 0) {
-                stackRoad.getChildren().add(setImageView("grass.png", size));
-                stackRoad.getChildren().add(setImageView(intArray[k].getImage(), size));
-                k++;
-            }
-            else {
-                stackRoad.getChildren().add(setImageView("grass zoom.png", size));
-                stackRoad.getChildren().add(setImageView("east-west zoom (three-quarter).png", size));
-            }
-            horizontalPopUp.getChildren().add(stackRoad);
-        }
-
-        StackPane DMS = makeDMS(size);
-        DMS.setTranslateX(size * -0.5323);
-
-        StackPane DMS2 = makeDMS(size);
-        DMS2.setTranslateX(size * 0.5323);
-
-        StackPane DMS3 = makeDMS(size);
-        DMS3.setTranslateY(size * -0.4010);
-
-        StackPane DMS4 = makeDMS(size);
-        DMS4.setTranslateY(size * 0.4010);
-
-        return new StackPane(horizontalPopUp, DMS, DMS2, DMS3, DMS4);
-    }
-
-    /**
-     * Creates the DMS sign with message
-     * TODO might make a DMS GUI class
-     *
-     * @param size Height of window
-     * @return StackPane of DMS
-     */
-    private StackPane makeDMS(double size) {
-        StackPane sign = new StackPane();
-        Label signText = new Label("LINE ONE\nLINE TWO\nLINE THREE");
-        signText.setFont(ledFont);
-        signText.setAlignment(Pos.TOP_LEFT);
-        signText.setBackground(Background.fill(Color.BLACK));
-        signText.setPadding(new Insets(0, 5, 0, 5));
-        signText.setTextFill(Color.web("0xFFFF73", 1.0));
-        signText.setPrefWidth(size * 0.375);
-        signText.setPrefHeight(size * 0.125);
-        sign.getChildren().add(signText);
-        return sign;
-    }
-
-    /**
-=======
->>>>>>> 5d0854ea0ac20618bf86a9106b1130bbc0f59544
      * Sets ImageView
      *
      * @param file File string
