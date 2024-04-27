@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 public class TrafficGUI {
 
     private final BorderPane borderPane;
+    private final StackPane stackPane;
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
     
@@ -35,14 +36,14 @@ public class TrafficGUI {
     /**
      * GUI for the program
      * TODO: Might have play/pause but will have an animation timer for cars
-     *
-     * @param borderPane BorderPane to use
+     * @param stackPane stackpane to use
      * @param scene main scene
      * @param rows num rows
      * @param cols num cols
      */
-    public TrafficGUI(BorderPane borderPane, Scene scene,  int rows, int cols) {
-        this.borderPane = borderPane;
+    public TrafficGUI(StackPane stackPane, Scene scene,  int rows, int cols) {
+        this.borderPane = new BorderPane();
+        this.stackPane = stackPane;
         this.scene = scene;
         this.rows = rows;
         this.cols = cols;
@@ -53,6 +54,8 @@ public class TrafficGUI {
      */
     public void setUp() {
         double size = screenSize.getHeight() / (rows + 1);
+        stackPane.setMinSize(5*size, 3*size);
+        stackPane.setMaxSize(5*size, 3*size);
         VBox vBox = new VBox();
 
         popUp.setTitle("Intersection");
@@ -139,6 +142,36 @@ public class TrafficGUI {
         // Vroom vroom
         roads.getChildren().add(setImageView("car_1.png", size * 0.133)); // TODO car
         borderPane.setCenter(roads);
+
+
+
+        Pane vehiclePane = new Pane();
+        vehiclePane.setPrefSize(screenSize.getWidth(), screenSize.getHeight());
+        vehiclePane.setStyle("-fx-background-color: transparent;");
+        vehiclePane.setMouseTransparent(true);
+
+        // Create ImageView objects and set their positions
+        ImageView imageView1 = setImageView("car_1.png", size * 0.133);
+        imageView1.setLayoutX(900 * (size/200));
+        imageView1.setLayoutY(100 * (size/200));
+        System.out.println(size);
+
+        ImageView imageView2 = setImageView("car_1.png", size * 0.133);
+        imageView2.setLayoutX(300);
+        imageView2.setLayoutY(100);
+
+        // Add the ImageView objects to the StackPane
+        vehiclePane.getChildren().addAll(imageView1, imageView2);
+
+        // Add additional images as needed
+
+        // Add the StackPane to your layout
+        //borderPane.getChildren().add(overlayPane);
+
+        // Add the overlay pane on top of your existing layout
+        this.stackPane.getChildren().addAll(borderPane, vehiclePane);
+
+        // Set the stackPane as the root of your scene
     }
 
     /**
