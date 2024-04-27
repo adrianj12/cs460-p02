@@ -9,6 +9,7 @@ public abstract class Vehicle implements Runnable {
     private boolean intersectionFlag = false;
     private int minBufferDistance = 10;
     private Point location = new Point();
+    private Lane lane;
     private boolean running = false;
 
     public Direction getDirection(){
@@ -49,6 +50,14 @@ public abstract class Vehicle implements Runnable {
 
     public void setPoint(Point p){
         this.location = p;
+    }
+
+    public void setLane(Lane lane){
+        this.lane = lane;
+    }
+
+    public Lane getLane(){
+        return this.lane;
     }
 
     public abstract boolean move();

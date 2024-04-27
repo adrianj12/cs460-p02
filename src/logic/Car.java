@@ -1,9 +1,18 @@
 package logic;
 
+import java.awt.*;
+
 public class Car extends Vehicle {
 
     private boolean EMS_inbound;
     private boolean running;
+
+
+    public Car(Point p, Direction dir, Lane lane){
+        this.setPoint(p);
+        this.setDirection(dir);
+        this.setLane(lane);
+    }
 
 
     public void flipEMS_inbound(){
