@@ -14,7 +14,9 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-// TODO Animation Timer
+/**
+ * Main class for the GUI
+ */
 public class TrafficGUI {
 
     private final BorderPane borderPane;
@@ -27,7 +29,6 @@ public class TrafficGUI {
 
     /**
      * GUI for the program
-     * TODO: Might have play/pause but will have an animation timer for cars
      *
      * @param borderPane BorderPane to use
      * @param scene main scene
@@ -44,7 +45,11 @@ public class TrafficGUI {
         //startTimer();
     }
 
-    public void startTimer() {
+    /**
+     * AnimationTimer for cars
+     * TODO: Cars (aka vroom vroom)
+     */
+    private void startTimer() {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -71,7 +76,6 @@ public class TrafficGUI {
             for (int j = 0; j < cols; j++) {
                 ImageView imageView;
 
-                // TODO: This sets alternating roads and intersections, later won't be so boring (time permitting)
                 if(i % 2 == 0) {
                     if (inter) {
                         imageView = setImageView("intersection lights (three-quarter).png", size);
@@ -115,7 +119,6 @@ public class TrafficGUI {
                         BorderPane popUpBorder = new BorderPane();
                         popUpBorder.setBackground(new Background(new BackgroundFill(green, null , null)));
                         popUpBorder.setCenter(popUpWindow.getPopUp(finalInterIndex));
-                        System.out.println(finalInterIndex);
                         popUp.setScene(new Scene(popUpBorder));
                         popUp.show();
                     }

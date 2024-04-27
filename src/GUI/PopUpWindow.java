@@ -12,6 +12,9 @@ import javafx.scene.text.Font;
 
 import static GUI.TrafficGUI.setImageView;
 
+/**
+ * For the PopUp Window
+ */
 public class PopUpWindow {
     private enum Messages {
         EMERGENCY("EMERGENCY VEHICLE\nAPPROACHING\nUSE CAUTION!"),
@@ -31,7 +34,11 @@ public class PopUpWindow {
     private final Font font;
     private final IntersectionGUI intersectionGUI;
 
-
+    /**
+     * Pop Up Window (For zoomed in intersection view)
+     *
+     * @param size Calculated size
+     */
     public PopUpWindow(double size) {
         this.size = size;
         this.font = Font.loadFont(getClass().getResourceAsStream(
@@ -40,6 +47,12 @@ public class PopUpWindow {
         this.popUp = makePopUp();
     }
 
+    /**
+     * Get (and update) the popup window
+     *
+     * @param index Intersection index
+     * @return Stackpane for the Popup
+     */
     public StackPane getPopUp(int index) {
         update(index);
         return this.popUp;
@@ -51,6 +64,11 @@ public class PopUpWindow {
         // and DMS
     }
 
+    /**
+     * Initializes popup stackpane
+     *
+     * @return Stackpane for popup
+     */
     private StackPane makePopUp() {
         HBox horizontalPopUp = new HBox();
         horizontalPopUp.setSpacing(-1);
