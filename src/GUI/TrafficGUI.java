@@ -152,9 +152,12 @@ public class TrafficGUI {
 
         // Create ImageView objects and set their positions
         ImageView imageView1 = setImageView("car_1.png", size * 0.133);
+        imageView1.setTranslateX(-size * 0.133/4);
+        imageView1.setTranslateY(-size * 0.133/2);
+        imageView1.setRotate(45);
         imageView1.setLayoutX(900 * (size/200));
         imageView1.setLayoutY(100 * (size/200));
-        System.out.println(size);
+        System.out.println(size * 0.133);
 
         ImageView imageView2 = setImageView("car_1.png", size * 0.133);
         imageView2.setLayoutX(300);
