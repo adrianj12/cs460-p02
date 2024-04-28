@@ -1,6 +1,7 @@
 package GUI;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -30,6 +31,7 @@ public class TrafficGUI {
 
     private final BorderPane borderPane;
     private final StackPane stackPane;
+    private static Pane vehiclePane;
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
     public static ImageView[] images = new ImageView[6];
@@ -39,6 +41,9 @@ public class TrafficGUI {
     private int currentClicked = 0;
     private final PopUpWindow popUpWindow;
     private final Intersection[] intArray = new Intersection[6];
+    ImageView imageView1;
+    ImageView imageView2;
+    static double size;
 
     /**
      * GUI for the program
@@ -64,9 +69,9 @@ public class TrafficGUI {
      * Set up the GUI and clickable elements
      */
     public void setUp() {
-        double size = screenSize.getHeight() / (rows + 1);
-        stackPane.setMinSize(5*size, 3*size);
-        stackPane.setMaxSize(5*size, 3*size);
+        size = screenSize.getHeight() / (rows + 1);
+        stackPane.setMinSize(5 * size, 3 * size);
+        stackPane.setMaxSize(5 * size, 3 * size);
         VBox vBox = new VBox();
         int interIndex = -1;
 
@@ -74,38 +79,42 @@ public class TrafficGUI {
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
         //Intersection[] intArray = new Intersection[6];
-        Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
-        for(int i = 0; i < rows; i++) {
+        Intersection.LightColor[] colors =
+                {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
+        for (int i = 0; i < rows; i++) {
             HBox hBox = new HBox();
             boolean inter = true;
             for (int j = 0; j < cols; j++) {
                 ImageView imageView;
 
                 // TODO: This sets alternating roads and intersections, later won't be so boring (time permitting)
-                if(i % 2 == 0) {
+                if (i % 2 == 0) {
                     if (inter) {
                         int rand = randy.nextInt(2);
                         interIndex++;
-                        intArray[interIndex]= new Intersection(interIndex, 1, 2, 3, 4,
-                                5, 6,colors[rand], colors[1-rand]);
-                        Thread intersectionThread= new Thread(intArray[interIndex]);
+                        intArray[interIndex] =
+                                new Intersection(interIndex, 1, 2, 3, 4,
+                                                 5, 6, colors[rand],
+                                                 colors[1 - rand]);
+                        Thread intersectionThread =
+                                new Thread(intArray[interIndex]);
                         intersectionThread.start();
                         imageView = setImageView("redgreen.png", size);
-                        images[interIndex]= imageView;
+                        images[interIndex] = imageView;
                         inter = false;
-                    }
-                    else {
-                        imageView = setImageView("east-west (three-quarter).png", size);
+                    } else {
+                        imageView =
+                                setImageView("east-west (three-quarter).png",
+                                             size);
                         inter = true;
                     }
-                }
-
-                else {
-                    if(inter) {
-                        imageView = setImageView("north-south (three-quarter).png", size);
+                } else {
+                    if (inter) {
+                        imageView =
+                                setImageView("north-south (three-quarter).png",
+                                             size);
                         inter = false;
-                    }
-                    else {
+                    } else {
                         imageView = new ImageView();
                         inter = true;
                     }
@@ -126,13 +135,15 @@ public class TrafficGUI {
                 // For the popup window
                 int finalInterIndex = interIndex;
                 stackPane.setOnMouseClicked((MouseEvent e) -> {
-                    if(popUp.isShowing()) {
+                    if (popUp.isShowing()) {
                         popUp.close();
                     }
-                    if(finalI % 2 == 0 && !finalInter) {
+                    if (finalI % 2 == 0 && !finalInter) {
                         BorderPane popUpBorder = new BorderPane();
-                        popUpBorder.setBackground(new Background(new BackgroundFill(green, null , null)));
-                        popUpBorder.setCenter(popUpWindow.getPopUp(finalInterIndex));
+                        popUpBorder.setBackground(new Background(
+                                new BackgroundFill(green, null, null)));
+                        popUpBorder.setCenter(
+                                popUpWindow.getPopUp(finalInterIndex));
                         currentClicked = finalInterIndex;
                         popUp.setScene(new Scene(popUpBorder));
                         popUp.show();
@@ -141,7 +152,7 @@ public class TrafficGUI {
 
                 // Overlay and cursor
                 stackPane.setOnMouseEntered((MouseEvent e) -> {
-                    if(finalI % 2 == 0 && !finalInter) {
+                    if (finalI % 2 == 0 && !finalInter) {
                         stackPane.getChildren().add(overlay);
                         scene.setCursor(Cursor.HAND);
                     }
@@ -167,38 +178,71 @@ public class TrafficGUI {
         borderPane.setCenter(roads);
         //discard roads usage, sorry i was trying to make it work, but it was
         // always centered and being weird if not centered
-        
-        Pane vehiclePane = new Pane();
+
+        vehiclePane = new Pane();
         vehiclePane.setPrefSize(screenSize.getWidth(), screenSize.getHeight());
-        vehiclePane.setStyle("-fx-background-color: transparent;");
         vehiclePane.setMouseTransparent(true);
 
         // Create ImageView objects and set their positions
-        ImageView imageView1 = setImageView("car_1.png", size * 0.133);
-        imageView1.setTranslateX(-size * 0.133/4);
-        imageView1.setTranslateY(-size * 0.133/2); //testing here
+        imageView1 = setImageView("car_1.png", size * 0.133);
+        imageView1.setTranslateX(-size * 0.133 / 4);
+        imageView1.setTranslateY(-size * 0.133 / 2); //testing here
         imageView1.setRotate(45);
-        imageView1.setLayoutX(900 * (size/200));
-        imageView1.setLayoutY(100 * (size/200));
 
-        ImageView imageView2 = setImageView("car_1.png", size * 0.133);
+
+        imageView1.setLayoutX((900) * (size / 200));
+        imageView1.setLayoutY(100 * (size / 200));
+
+
+        imageView2 = setImageView("car_1.png", size * 0.133);
         imageView2.setLayoutX(300);
         imageView2.setLayoutY(100);
 
-        // Add the ImageView objects to the StackPane
         vehiclePane.getChildren().addAll(imageView1, imageView2);
 
-        // Add additional images as needed
-
-        // Add the StackPane to your layout
-        //borderPane.getChildren().add(overlayPane);
-
-        // Add the overlay pane on top of your existing layout
         this.stackPane.getChildren().addAll(borderPane, vehiclePane);
 
-        // Set the stackPane as the root of your scene
+
     }
 
+    public static void addCar(ImageView imageView){
+        vehiclePane.getChildren().add(imageView);
+    }
+
+    public static void removeCar(ImageView imageView){
+        vehiclePane.getChildren().remove(imageView);
+    }
+
+    public void looper() {
+        new Thread(() -> {
+            final int[] x = {900}; // Using an array to hold the mutable value
+            final int y = 100; // y can remain as is
+
+            while (true) {
+                x[0]--; // Decrement x
+                if (x[0] < 10){
+                    x[0] = 1000;
+                }
+
+                // Update the position of imageView1
+                Platform.runLater(() -> {
+                    imageView1.setLayoutX(x[0]); // Using x[0]
+                    imageView1.setLayoutY(y);
+                });
+
+                try {
+                    Thread.sleep(100); // Sleep for 1 second before updating
+                    // again
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public static double getTileSize(){
+        return size;
+    }
 
 
 

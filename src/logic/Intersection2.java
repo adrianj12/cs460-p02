@@ -11,9 +11,11 @@ public class Intersection2 {
     private int northStop, southStop, eastStop, westStop;
     private int northBarrier, southBarrier, eastBarrier, westBarrier;
     private ArrayList<Point> exits = new ArrayList<>();
+    private int id;
 
 
-    public Intersection2(Point center){
+    public Intersection2(int id, Point center){
+        this.id = id;
         this.center = center;
 
         this.northStop = (int) center.getY() -60;
@@ -26,6 +28,7 @@ public class Intersection2 {
         this.eastBarrier =(int) center.getX() +39;
         this.westBarrier =(int) center.getX() -40;
 
+        // adding EXITS in clockwise order, important for future indexed get(i)
         this.exits.add(new Point( (int)center.getX() + 9,
                                     this.northBarrier ));//northLeft
         this.exits.add(new Point((int) center.getX() + 28,
@@ -46,7 +49,7 @@ public class Intersection2 {
         this.exits.add(new Point( this.westBarrier,
                                     (int) center.getY() + 28));//westRight
 
-        // adding in clockwise order, important for future indexed get(i) calls
+
 
     }
 
@@ -77,6 +80,7 @@ public class Intersection2 {
     }
 
     // Parameter: dir = current direction of incoming car
+    // Returns destination point for Car
     public Point getLeftTurn(Direction dir){
         switch (dir) {
             case NORTH:

@@ -4,7 +4,7 @@ import javafx.scene.image.ImageView;
 
 import java.awt.*;
 
-public abstract class Vehicle implements Runnable {
+public  class Vehicle implements Runnable {
     private Direction currentDir;
     private int speed = 0;
     private float transparency = 0;
@@ -13,8 +13,29 @@ public abstract class Vehicle implements Runnable {
     private Point location = new Point();
     private Lane lane;
     private boolean running = false;
-    ImageView imageView;
+    private ImageView imageView;
     private double imageRotation;
+    private int maxSpeed;
+    private int tileSize;
+    private int id;
+
+
+    public int getId(){
+        return this.id;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+
+    public int getTileSize(){
+        return this.tileSize;
+    }
+
+    public void setTileSize(int tileSize){
+        this.tileSize = tileSize;
+    }
 
     public Direction getDirection(){
         return currentDir;
@@ -52,7 +73,7 @@ public abstract class Vehicle implements Runnable {
         return this.location;
     }
 
-    public void setPoint(Point p){
+    public void setLocation(Point p){
         this.location = p;
     }
 
@@ -64,11 +85,42 @@ public abstract class Vehicle implements Runnable {
         return this.lane;
     }
 
-    public abstract boolean move();
+    public ImageView getImageView(){
+        return this.imageView;
+    }
+
+    public void setImageView(ImageView image){
+        this.imageView = image;
+    }
+
+    public void setImageRotation(Double rotation){
+        this.imageRotation = rotation;
+    }
+
+    public double getImageRotation(Double rotation){
+        return this.imageRotation;
+    }
+
+    public int getMaxSpeed(){
+        return this.maxSpeed;
+    }
+
+    public void setMaxSpeed(int speed){
+        this.maxSpeed = speed;
+    }
+
+
+    public boolean move() {
+                return true;
+
+    }
 
     @Override
-    public abstract void run();
+    public void run() {
+    }
 
-    public abstract void stop();
+    public void stop() {
+
+    }
 
 }
