@@ -23,12 +23,14 @@ import java.util.TimerTask;
  */
 public class PopUpWindow {
 
+    /**
+     * DMS message states
+     */
     private enum Messages {
         EMERGENCY("EMERGENCY VEHICLE\nAPPROACHING\nUSE CAUTION!"),
         REGULAR("NO SLOW DOWNS\nFOUND AHEAD\nPLEASE DRIVE SAFE!"),
         CONSTRUCTION("ROAD WORK AHEAD!\nON <STREET> FROM\n<START> TO <END"),
-        SLOWDOWN("ACCIDENT ON <STREET>\n<NUM> MIN SLOWDOWN\nALT ROUTE <STREET>"),
-        WEATHER("");
+        SLOWDOWN("ACCIDENT ON <STREET>\n<NUM> MIN SLOWDOWN\nALT ROUTE <STREET>");
         private final String message;
 
         Messages(String message) {
@@ -103,6 +105,10 @@ public class PopUpWindow {
         //update(index);
     }
 
+    /**
+     * Sets DMS message based on logic state
+     * Default: cycle default message and weather conditions
+     */
     private void updateDMSDisplay() {
 
         String message;
@@ -129,7 +135,7 @@ public class PopUpWindow {
                 break;
         }
 
-        Platform.runLater(() -> intersectionGUI.updateDMS(message, Directions.WEST));
+        intersectionGUI.updateDMS(message, Directions.WEST);
         intersectionGUI.updateDMS(message, Directions.NORTH);
         intersectionGUI.updateDMS(message, Directions.SOUTH);
         intersectionGUI.updateDMS(message, Directions.EAST);
@@ -156,7 +162,7 @@ public class PopUpWindow {
             horizontalPopUp.getChildren().add(stackRoad);
         }
 
-        /***** DMS objects *****/
+        /* DMS objects */
         StackPane DMS = makeDMS(size);
         DMS.setTranslateX(size * -0.5323);
         intersectionGUI.setDMSLabel((Label) DMS.getChildren().get(0), Directions.WEST);
@@ -172,7 +178,6 @@ public class PopUpWindow {
         StackPane DMS4 = makeDMS(size);
         DMS4.setTranslateY(size * 0.377);
         intersectionGUI.setDMSLabel((Label) DMS4.getChildren().get(0), Directions.SOUTH);
-        /***********************/
 
         ImageView lightOne = setImageView("light.png", size / 9);
         lightOne.setTranslateX(size * -0.5323 + size / 9);
@@ -224,7 +229,7 @@ public class PopUpWindow {
     }
 
     /**
-     * Creates the DMS sign with message
+     * Creates the DMS sign with default message
      *
      * @param size Height of window
      * @return StackPane of DMS
@@ -243,6 +248,9 @@ public class PopUpWindow {
         return sign;
     }
 
+    /**
+     * Timer for DMS display cycling
+     */
     private void startTimer() {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
