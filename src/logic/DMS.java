@@ -1,8 +1,5 @@
 package logic;
 
-import GUI.IntersectionGUI;
-import javafx.scene.layout.StackPane;
-
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
