@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SystemManager implements Runnable{
     Car car;
+    EMS ems;
     int row;
     private double size, outputSize, xLane1, xLane2, xLane3, xLane4, xLane5, xLane6, xLane7, xLane8;
     private double yLane1, yLane2, yLane3, yLane4, yLane5, yLane6, yLane7, yLane8, yLane9, yLane10,yLane11, yLane12;
@@ -18,7 +19,7 @@ public class SystemManager implements Runnable{
     private static int carID = 0;
     protected static int sleepDelay = 3000;
     private static int currentCars = 0;
-    private static int maxNumCars = 100;
+    private static int maxNumCars = 50;
     protected static int createVehicleProbability = 75;
     protected static int createEMSProbability = 25;
     private static String direction[] = {"North", "South", "East", "West"};
@@ -28,9 +29,11 @@ public class SystemManager implements Runnable{
     private double South_Lanes[];
 
     public static CopyOnWriteArrayList<Car> cars = new CopyOnWriteArrayList<>();
-    public static CopyOnWriteArrayList<Thread> carThread = new CopyOnWriteArrayList<>();
-    //protected CopyOnWriteArrayList<Intersection> intersections = new CopyOnWriteArrayList<>();
-    //protected CopyOnWriteArrayList<Thread> intersectionThreads = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Thread> carThreads = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<EMS> emsVehicles = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Thread> emsThreads = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Intersection> intersections = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Thread> intersectionThreads = new CopyOnWriteArrayList<>();
 
 
     public SystemManager(int Size){
@@ -89,7 +92,7 @@ public class SystemManager implements Runnable{
         cxINTX1 = size/2;
         cyINTX1 = size/2;
 
-//Intersection 2
+        //Intersection 2
         x0INTX2 = (size*2)+ (size/5);
         xFINTX2 = (size*2)+ (size/1.25);
         y0INTX2 = size/5;
@@ -205,7 +208,7 @@ public class SystemManager implements Runnable{
         int EMSprobability;
         int directionRNG;
         int laneRNG;
-        String car;
+        //String car;
         String Lane = "";
         EMSprobability = (int)(Math.random()*100);
         directionRNG = (int)(Math.random()*(4));
@@ -255,18 +258,22 @@ public class SystemManager implements Runnable{
         if(EMSprobability < createEMSProbability){
             //car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY +
             //        " Lane: " + Lane;
-            //car = new Car(carID, getDirection, carCoordinate, row, Lane);
+            //ems = new EMS(carID, getDirection, carCoordinate, row, Lane);
+            emsVehicles.add(ems);
+            Thread emsThread = new Thread(ems);
+            emsThreads.add(emsThread);
+            emsThread.start();
         }
         else{
             //car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY +
             //        " Lane: " + Lane;
             //car = new Car(carID, getDirection, carCoordinate , outputSize, Lane);
+            cars.add(car);
+            Thread carThread = new Thread(car);
+            carThreads.add(carThread);
+            carThread.start();
         }
         //System.out.println(car);
-        //cars.add(car);
-        //Thread carThread = new Thread(car);
-        //carThread.add(carThread);
-        //carThread.start();
         currentCars++;
         carID++;
     }
@@ -299,13 +306,25 @@ public class SystemManager implements Runnable{
     }
 
     private void removeVehicles(){
-        size = carThread.size();
-        if(size > 0){
-            for(int i = 0; i < size-1; i++){
-                if(!carThread.get(i).isAlive()){
+        int numCarThreads = carThreads.size();
+        int numEMSThreads = emsThreads.size();
+        if(numCarThreads > 0){
+            for(int i = 0; i < numCarThreads-1; i++){
+                if(!carThreads.get(i).isAlive()){
                     //System.out.println("should remove car");
-                    carThread.remove(i);
+                    carThreads.remove(i);
                     cars.remove(i);
+                    currentCars--;
+                    break;
+                }
+            }
+        }
+        if(numEMSThreads > 0){
+            for(int i = 0; i < numEMSThreads-1; i++){
+                if(!emsThreads.get(i).isAlive()){
+                    //System.out.println("should remove car");
+                    emsThreads.remove(i);
+                    emsVehicles.remove(i);
                     currentCars--;
                     break;
                 }
