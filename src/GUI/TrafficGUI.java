@@ -17,6 +17,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import logic.Intersection;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 /**
@@ -33,6 +36,7 @@ public class TrafficGUI {
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
+    private int currentClicked = 0;
     public static Intersection[] intArray = new Intersection[6];
     private final PopUpWindow popUpWindow;
 
@@ -52,7 +56,7 @@ public class TrafficGUI {
         this.cols = cols;
         this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33);
 
-        //startTimer();
+        startTimer();
     }
     public Intersection[] getIntArray(){
         return intArray;
@@ -64,9 +68,16 @@ public class TrafficGUI {
      */
     private void startTimer() {
         AnimationTimer timer = new AnimationTimer() {
+            private Duration last = Duration.of(0, ChronoUnit.MILLIS);
             @Override
             public void handle(long now) {
-
+                if(popUp.isShowing()) {
+                    Duration next = Duration.of(now, ChronoUnit.SECONDS);
+                    if (next.minus(last).toSeconds() > 0.5) {
+                        popUpWindow.update(currentClicked);
+                        last = next;
+                    }
+                }
             }
         };
         timer.start();
@@ -144,6 +155,7 @@ public class TrafficGUI {
                         BorderPane popUpBorder = new BorderPane();
                         popUpBorder.setBackground(new Background(new BackgroundFill(green, null , null)));
                         popUpBorder.setCenter(popUpWindow.getPopUp(finalInterIndex));
+                        currentClicked = finalInterIndex;
                         popUp.setScene(new Scene(popUpBorder));
                         popUp.show();
                     }
