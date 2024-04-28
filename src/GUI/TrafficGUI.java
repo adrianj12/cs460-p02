@@ -1,10 +1,12 @@
 package GUI;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -173,6 +175,8 @@ public class TrafficGUI {
         roads.getChildren().add(setImageView("car_1.png", size * 0.133));
         roads.getChildren().add(setImageView("ambulance.png", size * 0.133));
         borderPane.setCenter(roads);
+        //discard roads usage, sorry i was trying to make it work, but it was
+        // always centered and being weird if not centered
 
 
 
@@ -184,11 +188,10 @@ public class TrafficGUI {
         // Create ImageView objects and set their positions
         ImageView imageView1 = setImageView("car_1.png", size * 0.133);
         imageView1.setTranslateX(-size * 0.133/4);
-        imageView1.setTranslateY(-size * 0.133/2);
+        imageView1.setTranslateY(-size * 0.133/2); //testing here
         imageView1.setRotate(45);
         imageView1.setLayoutX(900 * (size/200));
         imageView1.setLayoutY(100 * (size/200));
-        System.out.println(size * 0.133);
 
         ImageView imageView2 = setImageView("car_1.png", size * 0.133);
         imageView2.setLayoutX(300);
@@ -256,7 +259,7 @@ public class TrafficGUI {
     private StackPane makeDMS(double size) {
         StackPane sign = new StackPane();
         Label signText = new Label("LINE ONE\nLINE TWO\nLINE THREE");
-        signText.setFont(ledFont);
+        //signText.setFont(ledFont);
         signText.setAlignment(Pos.TOP_LEFT);
         signText.setBackground(Background.fill(Color.BLACK));
         signText.setPadding(new Insets(0, 5, 0, 5));
