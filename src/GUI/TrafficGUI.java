@@ -15,6 +15,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import logic.Intersection;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 /**
@@ -30,7 +33,9 @@ public class TrafficGUI {
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
+    private int currentClicked = 0;
     private final PopUpWindow popUpWindow;
+    private final Intersection[] intArray = new Intersection[6];
 
     /**
      * GUI for the program
@@ -45,9 +50,9 @@ public class TrafficGUI {
         this.scene = scene;
         this.rows = rows;
         this.cols = cols;
-        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33);
+        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33, intArray);
 
-        //startTimer();
+        startTimer();
     }
 
     /**
@@ -56,9 +61,16 @@ public class TrafficGUI {
      */
     private void startTimer() {
         AnimationTimer timer = new AnimationTimer() {
+            private Duration last = Duration.of(0, ChronoUnit.MILLIS);
             @Override
             public void handle(long now) {
-
+                if(popUp.isShowing()) {
+                    Duration next = Duration.of(now, ChronoUnit.SECONDS);
+                    if (next.minus(last).toSeconds() > 0.5) {
+                        popUpWindow.update(currentClicked);
+                        last = next;
+                    }
+                }
             }
         };
         timer.start();
@@ -75,7 +87,7 @@ public class TrafficGUI {
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-        Intersection[] intArray = new Intersection[6];
+        //Intersection[] intArray = new Intersection[6];
         Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
         for(int i = 0; i < rows; i++) {
             HBox hBox = new HBox();
@@ -133,6 +145,7 @@ public class TrafficGUI {
                         BorderPane popUpBorder = new BorderPane();
                         popUpBorder.setBackground(new Background(new BackgroundFill(green, null , null)));
                         popUpBorder.setCenter(popUpWindow.getPopUp(finalInterIndex));
+                        currentClicked = finalInterIndex;
                         popUp.setScene(new Scene(popUpBorder));
                         popUp.show();
                     }
