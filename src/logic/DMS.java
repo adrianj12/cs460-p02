@@ -11,10 +11,20 @@ import org.json.JSONObject;
 
 public class DMS {
 
-    public String location = "Albuquerque";
-    private String data = null;
+    private final String location = "Albuquerque";
+    public State state;
+    public String wxMessage;
+
+    public enum State {
+        DEFAULT,
+        EMERGENCY,
+        CONSTRUCTION,
+        ACCIDENT,
+        WEATHER
+    }
 
     public DMS() {
+        state = State.DEFAULT;
         getWeatherInformation();
     }
 
@@ -27,7 +37,7 @@ public class DMS {
             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            data = response.body();
+            wxMessage = parseWeatherData(response.body());
             //this.data = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::body);
 
         } catch (IOException | InterruptedException e) {
@@ -35,10 +45,10 @@ public class DMS {
         }
     }
 
-    public String parseWeatherData() {
+    public String parseWeatherData(String data) {
 
         String output = "";
-        System.out.println(data);
+
         if(data != null) {
 
             try {
@@ -52,7 +62,7 @@ public class DMS {
                 JSONArray weatherArray = jsonObject.getJSONArray("weather");
                 String description = weatherArray.getJSONObject(0).getString("description");
 
-                output = String.format("Temperature: %.2f°F\nFeels Like: %.2f°F\nCondition: %s", temperature, feelsLike, description);
+                output = String.format("Temperature: %.0f°F\nFeels Like: %.0f°F\nCondition: %s", temperature, feelsLike, description);
 
             } catch (Exception e) {
                 System.err.println("Error parsing weather data: " + e.getMessage());

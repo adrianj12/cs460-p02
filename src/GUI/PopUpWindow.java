@@ -14,21 +14,26 @@ import logic.Intersection;
 
 import static GUI.TrafficGUI.setImageView;
 
+import javafx.application.Platform;
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * For the Intersection PopUp Window
  */
 public class PopUpWindow {
+
     private enum Messages {
         EMERGENCY("EMERGENCY VEHICLE\nAPPROACHING\nUSE CAUTION!"),
         REGULAR("NO SLOW DOWNS\nFOUND AHEAD\nPLEASE DRIVE SAFE!"),
         CONSTRUCTION("ROAD WORK AHEAD!\nON <STREET> FROM\n<START> TO <END"),
-        SLOWDOWN("ACCIDENT ON <STREET>\n<NUM> MIN SLOWDOWN\nALT ROUTE <STREET>");
+        SLOWDOWN("ACCIDENT ON <STREET>\n<NUM> MIN SLOWDOWN\nALT ROUTE <STREET>"),
+        WEATHER("");
         private final String message;
 
         Messages(String message) {
             this.message = message;
         }
-
     }
 
     private final StackPane popUp;
@@ -36,7 +41,9 @@ public class PopUpWindow {
     private final Font font;
     private final IntersectionGUI intersectionGUI;
     private final Intersection[] intArray;
-    DMS dmsLogic;
+
+    private final DMS dmsLogic;
+    private final Timer timer;
 
     /**
      * Pop Up Window (For zoomed in intersection view)
@@ -47,10 +54,12 @@ public class PopUpWindow {
         this.size = size;
         this.intArray = intArray;
         this.font = Font.loadFont(getClass().getResourceAsStream(
-                "../fonts/advanced-led-board-7.regular.ttf"), this.size / 32.5);
+                "../fonts/advanced-led-board-7.regular.ttf"), this.size / 34); // original: 32.5
         this.intersectionGUI = new IntersectionGUI();
         this.popUp = makePopUp();
+
         this.dmsLogic = new DMS();
+        this.timer = new Timer();
         dmsLogic.getWeatherInformation();
     }
 
@@ -62,6 +71,7 @@ public class PopUpWindow {
      */
     public StackPane getPopUp(int index) {
         update(index);
+        startTimer();
         return this.popUp;
     }
 
@@ -90,8 +100,39 @@ public class PopUpWindow {
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
-        intersectionGUI.updateDMS(dmsLogic.parseWeatherData(), Directions.WEST);
         //update(index);
+    }
+
+    private void updateDMSDisplay() {
+
+        String message;
+
+        switch(dmsLogic.state) {
+
+            case DMS.State.DEFAULT:
+            default:
+                message = Messages.REGULAR.message;
+                dmsLogic.state = DMS.State.WEATHER;
+                break;
+            case DMS.State.ACCIDENT:
+                message = Messages.SLOWDOWN.message;
+                break;
+            case DMS.State.CONSTRUCTION:
+                message = Messages.CONSTRUCTION.message;
+                break;
+            case DMS.State.EMERGENCY:
+                message = Messages.EMERGENCY.message;
+                break;
+            case DMS.State.WEATHER:
+                message = dmsLogic.wxMessage;
+                dmsLogic.state = DMS.State.DEFAULT;
+                break;
+        }
+
+        Platform.runLater(() -> intersectionGUI.updateDMS(message, Directions.WEST));
+        intersectionGUI.updateDMS(message, Directions.NORTH);
+        intersectionGUI.updateDMS(message, Directions.SOUTH);
+        intersectionGUI.updateDMS(message, Directions.EAST);
     }
 
     /**
@@ -200,5 +241,14 @@ public class PopUpWindow {
         signText.setPrefHeight(size * 0.125);
         sign.getChildren().add(signText);
         return sign;
+    }
+
+    private void startTimer() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> updateDMSDisplay());
+            }
+        }, 0, 8000); // update every 8000ms = 8s
     }
 }
