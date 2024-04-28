@@ -46,6 +46,7 @@ public class PopUpWindow {
 
     private final DMS dmsLogic;
     private final Timer timer;
+    private final String location = "Denver";
 
     /**
      * Pop Up Window (For zoomed in intersection view)
@@ -60,9 +61,8 @@ public class PopUpWindow {
         this.intersectionGUI = new IntersectionGUI();
         this.popUp = makePopUp();
 
-        this.dmsLogic = new DMS();
+        this.dmsLogic = new DMS(location);
         this.timer = new Timer();
-        dmsLogic.getWeatherInformation();
     }
 
     /**
