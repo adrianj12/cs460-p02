@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import logic.DMS;
 import logic.Intersection;
 
 import static GUI.TrafficGUI.setImageView;
@@ -35,6 +36,7 @@ public class PopUpWindow {
     private final Font font;
     private final IntersectionGUI intersectionGUI;
     private final Intersection[] intArray;
+    DMS dmsLogic;
 
     /**
      * Pop Up Window (For zoomed in intersection view)
@@ -48,6 +50,8 @@ public class PopUpWindow {
                 "../fonts/advanced-led-board-7.regular.ttf"), this.size / 32.5);
         this.intersectionGUI = new IntersectionGUI();
         this.popUp = makePopUp();
+        this.dmsLogic = new DMS();
+        dmsLogic.getWeatherInformation();
     }
 
     /**
@@ -86,6 +90,7 @@ public class PopUpWindow {
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
+        intersectionGUI.updateDMS(dmsLogic.parseWeatherData(), Directions.WEST);
         //update(index);
     }
 
@@ -110,6 +115,7 @@ public class PopUpWindow {
             horizontalPopUp.getChildren().add(stackRoad);
         }
 
+        /***** DMS objects *****/
         StackPane DMS = makeDMS(size);
         DMS.setTranslateX(size * -0.5323);
         intersectionGUI.setDMSLabel((Label) DMS.getChildren().get(0), Directions.WEST);
@@ -125,6 +131,7 @@ public class PopUpWindow {
         StackPane DMS4 = makeDMS(size);
         DMS4.setTranslateY(size * 0.377);
         intersectionGUI.setDMSLabel((Label) DMS4.getChildren().get(0), Directions.SOUTH);
+        /***********************/
 
         ImageView lightOne = setImageView("light.png", size / 9);
         lightOne.setTranslateX(size * -0.5323 + size / 9);
