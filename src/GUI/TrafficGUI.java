@@ -30,7 +30,7 @@ public class TrafficGUI {
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
-    public Intersection[] intArray = new Intersection[6];
+    public static Intersection[] intArray = new Intersection[6];
     private final PopUpWindow popUpWindow;
 
     /**
@@ -49,6 +49,9 @@ public class TrafficGUI {
         this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33);
 
         //startTimer();
+    }
+    public Intersection[] getIntArray(){
+        return intArray;
     }
 
     /**
