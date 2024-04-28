@@ -56,29 +56,9 @@ public class TrafficGUI {
         this.cols = cols;
         this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33, intArray);
 
-        startTimer();
+
     }
 
-    /**
-     * AnimationTimer for cars
-     * TODO: Cars (aka vroom vroom)
-     */
-    private void startTimer() {
-        AnimationTimer timer = new AnimationTimer() {
-            private Duration last = Duration.of(0, ChronoUnit.MILLIS);
-            @Override
-            public void handle(long now) {
-                if(popUp.isShowing()) {
-                    Duration next = Duration.of(now, ChronoUnit.SECONDS);
-                    if (next.minus(last).toSeconds() > 0.5) {
-                        popUpWindow.update(currentClicked);
-                        last = next;
-                    }
-                }
-            }
-        };
-        timer.start();
-    }
 
     /**
      * Set up the GUI and clickable elements
@@ -187,9 +167,7 @@ public class TrafficGUI {
         borderPane.setCenter(roads);
         //discard roads usage, sorry i was trying to make it work, but it was
         // always centered and being weird if not centered
-
-
-
+        
         Pane vehiclePane = new Pane();
         vehiclePane.setPrefSize(screenSize.getWidth(), screenSize.getHeight());
         vehiclePane.setStyle("-fx-background-color: transparent;");
@@ -221,64 +199,8 @@ public class TrafficGUI {
         // Set the stackPane as the root of your scene
     }
 
-    /**
-     * TODO: This will take params later for the DMS and lights, and other things
-     *       that make this show something that isn't just the intersection image
-     *
-     * @return StackPane of zoom in
-     */
-    private StackPane getPopUp() {
-        HBox horizontalPopUp = new HBox();
-        horizontalPopUp.setSpacing(-1);
-        double size = screenSize.getHeight() / 1.33;
-        for (int i = 0; i < 3; i++) {
-            StackPane stackRoad = new StackPane();
-            if(i % 2 != 0) {
-                stackRoad.getChildren().add(setImageView("grass.png", size));
-                stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
-            }
-            else {
-                stackRoad.getChildren().add(setImageView("grass zoom.png", size));
-                stackRoad.getChildren().add(setImageView("east-west zoom (three-quarter).png", size));
-            }
-            horizontalPopUp.getChildren().add(stackRoad);
-        }
 
-        StackPane DMS = makeDMS(size);
-        DMS.setTranslateX(size * -0.5323);
 
-        StackPane DMS2 = makeDMS(size);
-        DMS2.setTranslateX(size * 0.5323);
-
-        StackPane DMS3 = makeDMS(size);
-        DMS3.setTranslateY(size * -0.4010);
-
-        StackPane DMS4 = makeDMS(size);
-        DMS4.setTranslateY(size * 0.4010);
-
-        return new StackPane(horizontalPopUp, DMS, DMS2, DMS3, DMS4);
-    }
-
-    /**
-     * Creates the DMS sign with message
-     * TODO might make a DMS GUI class
-     *
-     * @param size Height of window
-     * @return StackPane of DMS
-     */
-    private StackPane makeDMS(double size) {
-        StackPane sign = new StackPane();
-        Label signText = new Label("LINE ONE\nLINE TWO\nLINE THREE");
-        //signText.setFont(ledFont);
-        signText.setAlignment(Pos.TOP_LEFT);
-        signText.setBackground(Background.fill(Color.BLACK));
-        signText.setPadding(new Insets(0, 5, 0, 5));
-        signText.setTextFill(Color.web("0xFFFF73", 1.0));
-        signText.setPrefWidth(size * 0.375);
-        signText.setPrefHeight(size * 0.125);
-        sign.getChildren().add(signText);
-        return sign;
-    }
 
     /**
      * Sets ImageView
