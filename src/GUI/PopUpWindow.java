@@ -15,7 +15,7 @@ import logic.Intersection;
 import static GUI.TrafficGUI.setImageView;
 
 /**
- * For the PopUp Window
+ * For the Intersection PopUp Window
  */
 public class PopUpWindow {
     private enum Messages {
