@@ -19,7 +19,7 @@ public class SystemManager implements Runnable{
     private static int carID = 0;
     protected static int sleepDelay = 3000;
     private static int currentCars = 0;
-    private static int maxNumCars = 100;
+    private static int maxNumCars = 50;
     protected static int createVehicleProbability = 75;
     protected static int createEMSProbability = 25;
     private static String direction[] = {"North", "South", "East", "West"};
