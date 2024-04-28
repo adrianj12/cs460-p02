@@ -37,8 +37,8 @@ public class TrafficGUI {
     private final int rows;
     private final int cols;
     private int currentClicked = 0;
-    public static Intersection[] intArray = new Intersection[6];
     private final PopUpWindow popUpWindow;
+    private final Intersection[] intArray = new Intersection[6];
 
     /**
      * GUI for the program
@@ -54,12 +54,9 @@ public class TrafficGUI {
         this.scene = scene;
         this.rows = rows;
         this.cols = cols;
-        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33);
+        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33, intArray);
 
         startTimer();
-    }
-    public Intersection[] getIntArray(){
-        return intArray;
     }
 
     /**
@@ -96,7 +93,7 @@ public class TrafficGUI {
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-
+        //Intersection[] intArray = new Intersection[6];
         Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
         for(int i = 0; i < rows; i++) {
             HBox hBox = new HBox();

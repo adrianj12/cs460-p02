@@ -15,7 +15,7 @@ public class Intersection implements Runnable {
     private LightDirection eastWestDir; // direction fo east, west lights
     private LightColor northSouthColor; // color of the north and south lights
     private LightColor eastWestColor; // color of east and west lights
-    public String currentImage;
+
     private ImageView[] images;
     private int eastWestAcc;
     private int northSouthAcc;
@@ -40,6 +40,7 @@ public class Intersection implements Runnable {
         this.eastWestAcc = 0; //traffic accumulator
         this.northSouthAcc = 0;
         this.images = TrafficGUI.images;
+
     }
 
     public enum LightColor {
@@ -68,20 +69,16 @@ public class Intersection implements Runnable {
     private void setImages(){
         if (images != null) {
             if (eastWestColor == LightColor.GREEN && northSouthColor == LightColor.RED) {
-                currentImage = "greenRed.png";
-                images[intersectionNumber].setImage(new Image(currentImage));
+                images[intersectionNumber].setImage(new Image("greenRed.png"));
             }
             if (eastWestColor == LightColor.RED && northSouthColor == LightColor.GREEN) {
-                currentImage ="redGreen.png";
-                images[intersectionNumber].setImage(new Image(currentImage));
+                images[intersectionNumber].setImage(new Image("redgreen.png"));
             }
             if (eastWestColor == LightColor.RED && northSouthColor == LightColor.YELLOW) {
-                currentImage = "redyellow.png";
-                images[intersectionNumber].setImage(new Image(currentImage));
+                images[intersectionNumber].setImage(new Image("redyellow.png"));
             }
             if (eastWestColor == LightColor.YELLOW && northSouthColor == LightColor.RED) {
-                currentImage = "yellowred.png";
-                images[intersectionNumber].setImage(new Image(currentImage));
+                images[intersectionNumber].setImage(new Image("yellowred.png"));
             }
         }
     }
@@ -123,9 +120,6 @@ public class Intersection implements Runnable {
     }
     public int getID(){
         return intersectionNumber;
-    }
-    public String getImage(){
-        return currentImage;
     }
     public double[] getCoords(){
         return new double[]{x0INTX1,xFINTX1, y0INTX1, yFINTX1, cxINTX1, cyINTX1};
