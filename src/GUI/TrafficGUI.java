@@ -131,7 +131,8 @@ public class TrafficGUI {
                     }
                 }
 
-                ImageView grass = setImageView("grass.png", size);
+
+                ImageView grass = setImageView("grassTrees.png", size);
 
                 StackPane stackPane = new StackPane(grass, imageView);
                 Circle overlay = new Circle(size / 2 - 5);
