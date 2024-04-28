@@ -12,6 +12,8 @@ import javafx.scene.text.Font;
 import logic.Intersection;
 
 import static GUI.TrafficGUI.setImageView;
+import static GUI.TrafficGUI.intArray;
+
 
 /**
  * For the PopUp Window
@@ -34,16 +36,14 @@ public class PopUpWindow {
     private final double size;
     private final Font font;
     private final IntersectionGUI intersectionGUI;
-    private final Intersection[] intArray;
 
     /**
      * Pop Up Window (For zoomed in intersection view)
      *
      * @param size Calculated size
      */
-    public PopUpWindow(double size, Intersection[] intArray) {
+    public PopUpWindow(double size) {
         this.size = size;
-        this.intArray = intArray;
         this.font = Font.loadFont(getClass().getResourceAsStream(
                 "../fonts/advanced-led-board-7.regular.ttf"), this.size / 32.5);
         this.intersectionGUI = new IntersectionGUI();
@@ -86,7 +86,6 @@ public class PopUpWindow {
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
-        //update(index);
     }
 
     /**
@@ -97,11 +96,20 @@ public class PopUpWindow {
     private StackPane makePopUp() {
         HBox horizontalPopUp = new HBox();
         horizontalPopUp.setSpacing(-1);
+        Intersection[] intArray = TrafficGUI.intArray;
+        int k = 0;
         for (int i = 0; i < 3; i++) {
             StackPane stackRoad = new StackPane();
             if(i % 2 != 0) {
                 stackRoad.getChildren().add(setImageView("grass.png", size));
-                stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
+                if(GUI.TrafficGUI.intArray[k] !=null) {
+                    System.out.printf("this is the return %s\n", GUI.TrafficGUI.intArray[k].getImage());
+                    stackRoad.getChildren().add(setImageView(GUI.TrafficGUI.intArray[k].getImage(), size));
+                    k++;
+                }
+                else{
+                    stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
+                }
             }
             else {
                 stackRoad.getChildren().add(setImageView("grass zoom.png", size));
