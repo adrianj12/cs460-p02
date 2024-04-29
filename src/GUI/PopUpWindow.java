@@ -115,21 +115,21 @@ public class PopUpWindow {
 
         switch(dmsLogic.state) {
 
-            case DMS.State.DEFAULT:
+            case DEFAULT:
             default:
                 message = Messages.REGULAR.message;
                 dmsLogic.state = DMS.State.WEATHER;
                 break;
-            case DMS.State.ACCIDENT:
+            case ACCIDENT:
                 message = Messages.SLOWDOWN.message;
                 break;
-            case DMS.State.CONSTRUCTION:
+            case CONSTRUCTION:
                 message = Messages.CONSTRUCTION.message;
                 break;
-            case DMS.State.EMERGENCY:
+            case EMERGENCY:
                 message = Messages.EMERGENCY.message;
                 break;
-            case DMS.State.WEATHER:
+            case WEATHER:
                 message = dmsLogic.wxMessage;
                 dmsLogic.state = DMS.State.DEFAULT;
                 break;

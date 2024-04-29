@@ -32,7 +32,8 @@ public class DMS {
         String url = "https://api.openweathermap.org/data/2.5/weather?q=" + location + "&appid=" + apiKey +
                 "&exclude=minutely,daily,alerts&units=imperial";
 
-        try (HttpClient client = HttpClient.newHttpClient()) {
+        HttpClient client = HttpClient.newHttpClient();
+        try {
             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -40,8 +41,12 @@ public class DMS {
 
         } catch (IOException | InterruptedException e) {
             System.out.println("Error getting weather info\n");
+        } finally {
+            // Close the HttpClient
+            client = null;
         }
     }
+
 
     private String parseWeatherData(String data) {
 
