@@ -130,7 +130,8 @@ public class PopUpWindow {
                 message = Messages.EMERGENCY.message;
                 break;
             case WEATHER:
-                message = dmsLogic.wxMessage;
+                message = (dmsLogic.wxMessage.isEmpty())?
+                        "No weather data\nCall 1-555-WEATHER\nfor more information" : dmsLogic.wxMessage;
                 dmsLogic.state = DMS.State.DEFAULT;
                 break;
         }
