@@ -7,10 +7,16 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
+import static logic.Intersection.LightColor.GREEN;
+import static logic.Intersection.LightColor.RED;
+import static logic.Intersection.LightColor.YELLOW;
+
+
 public class SystemManager implements Runnable{
     Car car;
-    int row;
-    private double size, outputSize, xLane1, xLane2, xLane3, xLane4, xLane5, xLane6, xLane7, xLane8;
+    EMS ems;
+    private final double size;
+    private double xLane1, xLane2, xLane3, xLane4, xLane5, xLane6, xLane7, xLane8;
     private double yLane1, yLane2, yLane3, yLane4, yLane5, yLane6, yLane7, yLane8, yLane9, yLane10,yLane11, yLane12;
     private double x0INTX1, xFINTX1, x0INTX2, xFINTX2, x0INTX3, xFINTX3, x0INTX4, xFINTX4, x0INTX5, xFINTX5, x0INTX6, xFINTX6;
     private double y0INTX1, yFINTX1, y0INTX2, yFINTX2, y0INTX3, yFINTX3, y0INTX4, yFINTX4, y0INTX5, yFINTX5, y0INTX6, yFINTX6;
@@ -18,7 +24,7 @@ public class SystemManager implements Runnable{
     private static int carID = 0;
     protected static int sleepDelay = 3000;
     private static int currentCars = 0;
-    private static int maxNumCars = 100;
+    private static int maxNumCars = 50;
     protected static int createVehicleProbability = 75;
     protected static int createEMSProbability = 25;
     private static String direction[] = {"North", "South", "East", "West"};
@@ -28,9 +34,11 @@ public class SystemManager implements Runnable{
     private double South_Lanes[];
 
     public static CopyOnWriteArrayList<Car> cars = new CopyOnWriteArrayList<>();
-    public static CopyOnWriteArrayList<Thread> carThread = new CopyOnWriteArrayList<>();
-    //protected CopyOnWriteArrayList<Intersection> intersections = new CopyOnWriteArrayList<>();
-    //protected CopyOnWriteArrayList<Thread> intersectionThreads = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Thread> carThreads = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<EMS> emsVehicles = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Thread> emsThreads = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Intersection> intersections = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Thread> intersectionThreads = new CopyOnWriteArrayList<>();
 
 
     public SystemManager(int Size){
@@ -89,7 +97,7 @@ public class SystemManager implements Runnable{
         cxINTX1 = size/2;
         cyINTX1 = size/2;
 
-//Intersection 2
+        //Intersection 2
         x0INTX2 = (size*2)+ (size/5);
         xFINTX2 = (size*2)+ (size/1.25);
         y0INTX2 = size/5;
@@ -97,7 +105,7 @@ public class SystemManager implements Runnable{
         cxINTX2 = (size*2)+ (size/2);
         cyINTX2 = size/2;
 
-//Intersection 3
+        //Intersection 3
         x0INTX3 = (size*4)+ (size/5);
         xFINTX3 = (size*4)+ (size/1.25);
         y0INTX3 = size/5;
@@ -105,7 +113,7 @@ public class SystemManager implements Runnable{
         cxINTX3 = (size*4)+ (size/2);
         cyINTX3 = size/2;
 
-//Intersection 4
+        //Intersection 4
         x0INTX4 = size/5;
         xFINTX4 = size/1.25;
         y0INTX4 = (size*2)+(size/5);
@@ -113,7 +121,7 @@ public class SystemManager implements Runnable{
         cxINTX4 = size/2;
         cyINTX4 = (size*2)+(size/2);
 
-//Intersection 5
+        //Intersection 5
         x0INTX5 = (size*2)+(size/5);
         xFINTX5 = (size*2)+(size/1.25);
         y0INTX5 = (size*2)+(size/5);
@@ -121,7 +129,7 @@ public class SystemManager implements Runnable{
         cxINTX5 = (size*2)+(size/2);
         cyINTX5 = (size*2)+(size/2);
 
-//Intersection = 6
+        //Intersection = 6
         x0INTX6 = (size*4)+(size/5);
         xFINTX6 = (size*4)+(size/1.25);
         y0INTX6 = (size*2)+(size/5);
@@ -165,38 +173,39 @@ public class SystemManager implements Runnable{
 //                " Elane1: " + East_Lanes[2] + " Elane2: " + East_Lanes[3] +
 //                " Wlane1: " + West_Lanes[2] + " Wlane2: " + West_Lanes[3];
 
-//        Intersection INTX1 = new Intersection(1,x0INTX1, xFINTX1, y0INTX1, yFINTX1, cxINTX1, cyINTX1);
-//        intersections.add(INTX1);
-//        Thread INTX1Thread = new Thread(INTX1);
-//        intersectionThreads.add(INTX1Thread);
-//
-//        Intersection INTX2 = new Intersection(2,x0INTX2, xFINTX2, y0INTX2, yFINTX2, cxINTX2, cyINTX2);
-//        intersections.add(INTX2);
-//        Thread INTX2Thread = new Thread(INTX2);
-//        intersectionThreads.add(INTX2Thread);
-//
-//        Intersection INTX3 = new Intersection(3,x0INTX3, xFINTX3, y0INTX3, yFINTX3, cxINTX3, cyINTX3);
-//        intersections.add(INTX3);
-//        Thread INTX3Thread = new Thread(INTX3);
-//        intersectionThreads.add(INTX3Thread);
-//
-//        Intersection INTX4 = new Intersection(4,x0INTX4, xFINTX4, y0INTX4, yFINTX4, cxINTX4, cyINTX4);
-//        intersections.add(INTX4);
-//        Thread INTX4Thread = new Thread(INTX4);
-//        intersectionThreads.add(INTX4Thread);
-//
-//        Intersection INTX5 = new Intersection(5,x0INTX5, xFINTX5, y0INTX5, yFINTX5, cxINTX5, cyINTX5);
-//        intersections.add(INTX5);
-//        Thread INTX5Thread = new Thread(INTX5);
-//        intersectionThreads.add(INTX5Thread);
-//
-//        Intersection INTX6 = new Intersection(6,x0INTX6, xFINTX6, y0INTX6, yFINTX6, cxINTX6, cyINTX6);
-//        intersections.add(INTX6);
-//        Thread INTX6Thread = new Thread(INTX6);
-//        intersectionThreads.add(INTX6Thread);
-//        for(int j = 0; j < 6; i++){
-//            intersectionThreads.get(i).start();
-//        }
+        Intersection INTX1 = new Intersection(1,x0INTX1, xFINTX1, y0INTX1, yFINTX1, cxINTX1, cyINTX1, RED, GREEN);
+        intersections.add(INTX1);
+        Thread INTX1Thread = new Thread(INTX1);
+        intersectionThreads.add(INTX1Thread);
+
+        Intersection INTX2 = new Intersection(2,x0INTX2, xFINTX2, y0INTX2, yFINTX2, cxINTX2, cyINTX2, RED, GREEN);
+        intersections.add(INTX2);
+        Thread INTX2Thread = new Thread(INTX2);
+        intersectionThreads.add(INTX2Thread);
+
+        Intersection INTX3 = new Intersection(3,x0INTX3, xFINTX3, y0INTX3, yFINTX3, cxINTX3, cyINTX3, RED, GREEN);
+        intersections.add(INTX3);
+        Thread INTX3Thread = new Thread(INTX3);
+        intersectionThreads.add(INTX3Thread);
+
+        Intersection INTX4 = new Intersection(4,x0INTX4, xFINTX4, y0INTX4, yFINTX4, cxINTX4, cyINTX4, RED, GREEN);
+        intersections.add(INTX4);
+        Thread INTX4Thread = new Thread(INTX4);
+        intersectionThreads.add(INTX4Thread);
+
+        Intersection INTX5 = new Intersection(5,x0INTX5, xFINTX5, y0INTX5, yFINTX5, cxINTX5, cyINTX5, RED, GREEN);
+        intersections.add(INTX5);
+        Thread INTX5Thread = new Thread(INTX5);
+        intersectionThreads.add(INTX5Thread);
+
+        Intersection INTX6 = new Intersection(6,x0INTX6, xFINTX6, y0INTX6, yFINTX6, cxINTX6, cyINTX6, RED, GREEN);
+        intersections.add(INTX6);
+        Thread INTX6Thread = new Thread(INTX6);
+        intersectionThreads.add(INTX6Thread);
+
+        for(int j = 0; j < 6; i++){
+            intersectionThreads.get(i).start();
+        }
     }
 
     private void createVehicle(){
@@ -205,7 +214,6 @@ public class SystemManager implements Runnable{
         int EMSprobability;
         int directionRNG;
         int laneRNG;
-        String car;
         String Lane = "";
         EMSprobability = (int)(Math.random()*100);
         directionRNG = (int)(Math.random()*(4));
@@ -255,26 +263,27 @@ public class SystemManager implements Runnable{
         if(EMSprobability < createEMSProbability){
             //car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY +
             //        " Lane: " + Lane;
-            //car = new Car(carID, getDirection, carCoordinate, row, Lane);
+            //ems = new EMS(carID, getDirection, carCoordinate, row, Lane);
+            emsVehicles.add(ems);
+            Thread emsThread = new Thread(ems);
+            emsThreads.add(emsThread);
+            emsThread.start();
         }
         else{
             //car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY +
             //        " Lane: " + Lane;
             //car = new Car(carID, getDirection, carCoordinate , outputSize, Lane);
+            cars.add(car);
+            Thread carThread = new Thread(car);
+            carThreads.add(carThread);
+            carThread.start();
         }
         //System.out.println(car);
-        //cars.add(car);
-        //Thread carThread = new Thread(car);
-        //carThread.add(carThread);
-        //carThread.start();
         currentCars++;
         carID++;
     }
 
-    private void createDMS(){}
-
     private int RNGCarRoll(){
-        Random rand = new Random();
         int NumOfCarsToCreate = 0;
         int probability;
 
@@ -299,13 +308,23 @@ public class SystemManager implements Runnable{
     }
 
     private void removeVehicles(){
-        size = carThread.size();
-        if(size > 0){
-            for(int i = 0; i < size-1; i++){
-                if(!carThread.get(i).isAlive()){
-                    //System.out.println("should remove car");
-                    carThread.remove(i);
+        int numCarThreads = carThreads.size();
+        int numEMSThreads = emsThreads.size();
+        if(numCarThreads > 0){
+            for(int i = 0; i < numCarThreads-1; i++){
+                if(!carThreads.get(i).isAlive()){
+                    carThreads.remove(i);
                     cars.remove(i);
+                    currentCars--;
+                    break;
+                }
+            }
+        }
+        if(numEMSThreads > 0){
+            for(int i = 0; i < numEMSThreads-1; i++){
+                if(!emsThreads.get(i).isAlive()){
+                    emsThreads.remove(i);
+                    emsVehicles.remove(i);
                     currentCars--;
                     break;
                 }
@@ -318,7 +337,6 @@ public class SystemManager implements Runnable{
         int numCarCreate = 0;
         createLanes();
         createIntersection();
-        createDMS();
 
         while(true){
             try {

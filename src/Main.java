@@ -45,4 +45,3 @@ public class Main extends Application {
         gui.looper();
     }
 }
-
