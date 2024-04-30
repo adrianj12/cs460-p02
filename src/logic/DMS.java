@@ -77,7 +77,7 @@ public class DMS {
                 try {
 
                     JSONObject wind = jsonObject.getJSONObject("wind");
-                    windGust = wind.getDouble("gust"); // TODO: fail successfully if gust is not found
+                    windGust = wind.getDouble("gust");
                     windDir = wind.getDouble("deg");
 
                     output = String.format("%sWind gusts: %.0fmph %s", output, windGust, degreesToCardinal(windDir));
