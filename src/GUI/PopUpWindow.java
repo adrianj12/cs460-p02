@@ -46,7 +46,7 @@ public class PopUpWindow {
 
     private final DMS dmsLogic;
     private final Timer timer;
-    private final String location = "Denver";
+    private final String location = "Albuquerque";
 
     /**
      * Pop Up Window (For zoomed in intersection view)
