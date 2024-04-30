@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class DMS {
 
     public State state;
-    public String wxMessage;
+    public String wxMessage = "";
 
     public enum State {
         DEFAULT,
@@ -50,15 +50,21 @@ public class DMS {
 
         if(data != null) {
 
+            double temperature, feelsLike, windGust, windDir;
+            int humidity;
+
+            JSONObject jsonObject;
+
             try {
+
                 // Parse the data using org.json
-                JSONObject jsonObject = new JSONObject(data);
+                jsonObject = new JSONObject(data);
 
                 try {
 
                     JSONObject main = jsonObject.getJSONObject("main");
-                    double temperature = main.getDouble("temp");
-                    double feelsLike = main.getDouble("feels_like");
+                    temperature = main.getDouble("temp");
+                    feelsLike = main.getDouble("feels_like");
 
                     output = String.format("Temperature: %.0f°F\nFeels like: %.0f°F\n",
                             temperature, feelsLike);
@@ -71,14 +77,24 @@ public class DMS {
                 try {
 
                     JSONObject wind = jsonObject.getJSONObject("wind");
-                    double windGust = wind.getDouble("gust"); // TODO: fail successfully if gust is not found
-                    double windDir = wind.getDouble("deg");
+                    windGust = wind.getDouble("gust"); // TODO: fail successfully if gust is not found
+                    windDir = wind.getDouble("deg");
 
                     output = String.format("%sWind gusts: %.0fmph %s", output, windGust, degreesToCardinal(windDir));
 
                 } catch(Exception e) {
 
-                    // no wind data found
+                    // fail back with humidity on 3rd line
+                    try {
+
+                        JSONObject main = jsonObject.getJSONObject("main");
+                        humidity = main.getInt("humidity");
+
+                        output = output + "Humidity: " + humidity + "%";
+
+                    } catch(Exception ef) {
+                        // should not go in here
+                    }
 
                 }
 
